@@ -1,0 +1,13 @@
+name = "tastebridge"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+[ai]
+binding = "AI"
+
+[[rules]]
+type = "Text"
+globs = ["**/*.html"]
+fallthrough = true
+
+# Set your Qloo hackathon key with:  npx wrangler secret put QLOO_API_KEY
