@@ -133,14 +133,15 @@ export async function compareTastes(env, { a_ids, b_ids, take = 10 }) {
 }
 
 /** Cross-domain recommendations from entity and/or tag signals. */
-export async function recommend(env, { domain, entity_ids, tag_ids, location, place_tag_ids, take = 6, exclude_ids }) {
+export async function recommend(env, { domain, entity_ids, tag_ids, location, place_tag_ids, take = 6, exclude_ids, popularity }) {
   const type = DOMAINS[domain];
   if (!type) throw new Error(`Unsupported domain ${domain}. Use one of ${Object.keys(DOMAINS).join(", ")}`);
   const params = {
     "filter.type": type,
     "signal.interests.entities": entity_ids,
     "signal.interests.tags": tag_ids,
-    take: Math.min(Math.max(take, 1), 10) + (exclude_ids?.length || 0),
+    take: Math.min(Math.max(take, 1), 30) + (exclude_ids?.length || 0),
+    "filter.popularity.min": popularity,
   };
   if (location && (domain === "place" || domain === "destination")) params["filter.location.query"] = location;
   if (place_tag_ids?.length && domain === "place") params["filter.tags"] = place_tag_ids;
