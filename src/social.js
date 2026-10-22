@@ -67,7 +67,13 @@ const PROFILE_SQL = "SELECT u.id, u.handle, u.demo, p.display, p.city, p.bio, p.
 function publicCard(p, { blind = false } = {}) {
   const ents = (p.entities || []).map(({ id, name, domain, image, year }) => ({ id, name, domain, image, year }));
   const tags = displayTags((p.tags || []).filter((t) => t.ch !== "e"), 8);
-  const card = { archetype: p.archetype || "", tagline: p.tagline || "", color: p.color || COLORS[p.id % COLORS.length], favorites: ents, tags, demo: !!p.demo, city: p.city || "" };
+  const all = p.tags || [];
+  const next = [...all.filter((t) => t.ch === "e" && t.kind === "movie").slice(0, 3), ...all.filter((t) => t.ch === "e" && t.kind === "artist").slice(0, 2)].map(({ id, name, kind, image, year }) => ({ id, name, domain: kind, image, year }));
+  const music = topTags(all.filter((t) => t.ch === "m"), 4);
+  const story = topTags(all.filter((t) => t.ch !== "e" && t.ch !== "m"), 40);
+  const group = (re) => story.filter((t) => re.test(t.kind || "")).slice(0, 4).map((t) => t.name);
+  const dna = { style: group(/^style/), genre: group(/^genre:media/), archetype: group(/^archetype/), character: group(/^character/), theme: group(/^theme/), music: music.map((t) => t.name) };
+  const card = { archetype: p.archetype || "", tagline: p.tagline || "", color: p.color || COLORS[p.id % COLORS.length], favorites: ents, tags, next, dna, demo: !!p.demo, city: p.city || "" };
   if (blind) return { ...card, uid: p.id, favorites: ents.slice(0, 4) };
   return { ...card, uid: p.id, handle: p.handle, display: p.display || p.handle, bio: p.bio || "", complete: ents.length >= 3 };
 }
@@ -404,6 +410,19 @@ async function duelsFor(env, user) {
   return json({ duels: results.map((r) => ({ id: r.id, creator: r.creator, target: r.target, score: r.score, total: JSON.parse(r.rounds).length })) });
 }
 
+const DISCOVER_DOMAINS = ["movie", "tv_show", "artist", "book", "podcast"];
+/** Poster wall for the Taste ID studio: Qloo's most popular titles, or (once you've picked a few) what Qloo predicts you'd also pick. */
+async function discover(env, url) {
+  const domain = DISCOVER_DOMAINS.includes(url.searchParams.get("domain")) ? url.searchParams.get("domain") : "movie";
+  const seeds = (url.searchParams.get("seeds") || "").split(",").filter((x) => /^[A-Za-z0-9-]{8,64}$/.test(x)).slice(0, 10);
+  const exclude = (url.searchParams.get("exclude") || "").split(",").filter(Boolean).slice(0, 20);
+  let items = [];
+  if (seeds.length) items = await recommend(env, { domain, entity_ids: seeds, take: 18, exclude_ids: [...seeds, ...exclude] }).catch(() => []);
+  const personal = items.length >= 6;
+  if (!personal) items = await recommend(env, { domain, take: 18, popularity: 0.95, exclude_ids: exclude }).catch(() => []);
+  return json({ domain, personal, items: items.map(({ id, name, domain, image, year, tags }) => ({ id, name, domain, image, year, tags: (tags || []).slice(0, 2) })) });
+}
+
 async function search(env, url) {
   const q = (url.searchParams.get("q") || "").trim().slice(0, 80);
   if (q.length < 2) return json({ results: [] });
@@ -429,6 +448,7 @@ export async function handleSocial(request, env, url) {
   if (p === "/api/login" && m === "POST") return login(env, request);
   if (p === "/api/logout" && m === "POST") return logout(env, request);
   if (p === "/api/search") return search(env, url);
+  if (p === "/api/discover") return discover(env, url);
   if (p === "/api/me" && m === "GET") return user ? me(env, user) : json({ user: null });
   if (p === "/api/profile" && m === "POST") return (r = need()) || saveProfile(env, request, user);
   if (p.startsWith("/api/card/")) return getCard(env, decodeURIComponent(p.slice(10)), user);
