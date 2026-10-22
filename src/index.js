@@ -1,5 +1,8 @@
 import { runAgent } from "./agent.js";
-import html from "./index.html";
+import app from "./app.html";
+import quick from "./quick.html";
+import { handleSocial, bridgeInput } from "./social.js";
+import { makeGate } from "./qloo.js";
 
 const MAX_ITEMS = 6;
 
@@ -11,11 +14,21 @@ function clean(list) {
 }
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, baseEnv, ctx) {
+    const env = { ...baseEnv, __gate: makeGate() };
     const url = new URL(request.url);
 
-    if (url.pathname === "/" || url.pathname === "/index.html") {
-      return new Response(html, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    const page = (h) => new Response(h, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-cache" } });
+    if (url.pathname === "/" || url.pathname === "/index.html" || url.pathname.startsWith("/u/") || url.pathname.startsWith("/duel/")) return page(app);
+    if (url.pathname === "/quick" || url.pathname === "/bridge") return page(quick);
+
+    if (url.pathname.startsWith("/api/") && url.pathname !== "/api/blend" && url.pathname !== "/api/health") {
+      try {
+        const r = await handleSocial(request, env, url);
+        if (r) return r;
+      } catch (e) {
+        return Response.json({ error: String(e.message || e) }, { status: 500 });
+      }
     }
 
     if (url.pathname === "/api/health") {
@@ -38,7 +51,12 @@ export default {
         refine: body.refine ? String(body.refine).slice(0, 300) : undefined,
         context: body.context || undefined,
       };
-      if (!input.refine && (input.a_items.length < 1 || input.b_items.length < 1)) {
+      if (body.a_handle && body.b_handle && !input.refine) {
+        const bi = await bridgeInput(env, body.a_handle, body.b_handle);
+        if (!bi || !bi.a_entities.length || !bi.b_entities.length) return Response.json({ error: "Both cards need favorites first." }, { status: 400 });
+        Object.assign(input, bi, { city: input.city || bi.city });
+      }
+      if (!input.refine && !input.a_entities && (input.a_items.length < 1 || input.b_items.length < 1)) {
         return Response.json({ error: "Each person needs at least one favorite." }, { status: 400 });
       }
 
