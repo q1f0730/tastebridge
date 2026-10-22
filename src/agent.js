@@ -175,7 +175,15 @@ async function gather(env, input, ctx, registry, emit) {
         return best;
       })
     );
-  const [a, b] = await Promise.all([resolveSide(input.a_items, "a"), resolveSide(input.b_items, "b")]);
+  const preset = (ents, side) =>
+    ents.map((e) => {
+      registry.set(e.id, e);
+      emit({ type: "resolved", side, query: e.name, entity: e });
+      return e;
+    });
+  const [a, b] = input.a_entities
+    ? [preset(input.a_entities, "a"), preset(input.b_entities, "b")]
+    : await Promise.all([resolveSide(input.a_items, "a"), resolveSide(input.b_items, "b")]);
   const pick = (x) => x && { id: x.id, name: x.name, domain: x.domain };
   ctx.a = a.filter(Boolean).map(pick);
   ctx.b = b.filter(Boolean).map(pick);
@@ -183,7 +191,7 @@ async function gather(env, input, ctx, registry, emit) {
   const aIds = ctx.a.map((x) => x.id);
   const bIds = ctx.b.map((x) => x.id);
   const listed = new Set([...aIds, ...bIds]);
-  const listedNames = new Set([...input.a_items, ...input.b_items, ...ctx.a.map((x) => x.name), ...ctx.b.map((x) => x.name)].map(norm));
+  const listedNames = new Set([...(input.a_items || []), ...(input.b_items || []), ...ctx.a.map((x) => x.name), ...ctx.b.map((x) => x.name)].map(norm));
   ctx.listedNames = [...listedNames];
 
   // Compare taste profiles. "Shared" = tags present in both distinct profiles + Qloo's own overlap tags.
