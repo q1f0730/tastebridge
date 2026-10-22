@@ -11,3 +11,9 @@ globs = ["**/*.html"]
 fallthrough = true
 
 # Set your Qloo hackathon key with:  npx wrangler secret put QLOO_API_KEY
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tastebridge-db"
+database_id = "c22aec4b-38f3-4140-987c-96c1eca2d834"
+# Create tables with: npx wrangler d1 execute tastebridge-db --remote --file=schema.sql
