@@ -20,16 +20,21 @@ const DOMAIN_BY_URN = Object.fromEntries(Object.entries(DOMAINS).map(([k, v]) =>
 // Per-isolate memo so repeated demo runs stay fast (and under the Workers subrequest cap).
 const memo = new Map();
 
-// Small concurrency gate: Qloo's hackathon tier throttles bursts.
-let active = 0;
-const waiters = [];
+// Small concurrency gate: Qloo's hackathon tier throttles bursts. One gate per request
+// (promises must not be resolved across Worker requests).
 const LIMIT = 6;
-const acquire = () => (active < LIMIT ? (active++, Promise.resolve()) : new Promise((r) => waiters.push(r)));
-const release = () => {
-  const next = waiters.shift();
-  if (next) next();
-  else active--;
-};
+export function makeGate() {
+  let active = 0;
+  const waiters = [];
+  return {
+    acquire: () => (active < LIMIT ? (active++, Promise.resolve()) : new Promise((r) => waiters.push(r))),
+    release: () => {
+      const next = waiters.shift();
+      if (next) next();
+      else active--;
+    },
+  };
+}
 
 async function qloo(env, path, params) {
   const qs = new URLSearchParams();
@@ -42,12 +47,13 @@ async function qloo(env, path, params) {
 
   let res, text;
   for (let attempt = 0; attempt < 3; attempt++) {
-    await acquire();
+    const gate = env.__gate || (env.__gate = makeGate());
+    await gate.acquire();
     try {
       res = await fetch(url, { headers: { "X-Api-Key": env.QLOO_API_KEY, accept: "application/json" } });
       text = await res.text();
     } finally {
-      release();
+      gate.release();
     }
     if (res.ok || (res.status < 500 && res.status !== 429)) break;
     await new Promise((r) => setTimeout(r, 400 * (attempt + 1)));
@@ -154,4 +160,10 @@ export async function getEntities(env, ids) {
   if (!ids.length) return [];
   const data = await qloo(env, "/entities", { entity_ids: ids });
   return (data.results || []).map(slimEntity);
+}
+
+/** Tags Qloo associates most strongly with a set of entities (a person's taste fingerprint). */
+export async function qlooTags(env, { entity_ids, types, take = 50 }) {
+  const data = await qloo(env, "/v2/insights", { "filter.type": "urn:tag", "filter.tag.types": types, "signal.interests.entities": entity_ids, take });
+  return (data.results?.tags || []).map((t) => ({ id: t.tag_id || t.id, name: t.name, kind: (t.subtype || t.type || "").split(":").slice(2).join(":") }));
 }
