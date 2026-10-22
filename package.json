@@ -1,0 +1,14 @@
+{
+  "name": "tastebridge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An agent that finds real common ground between two people's tastes using Qloo's Taste AI.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "license": "MIT"
+}
