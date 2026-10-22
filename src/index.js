@@ -22,6 +22,13 @@ export default {
     if (url.pathname === "/" || url.pathname === "/index.html" || url.pathname.startsWith("/u/") || url.pathname.startsWith("/duel/")) return page(app);
     if (url.pathname === "/quick" || url.pathname === "/bridge") return page(quick);
 
+    // Same-origin image proxy (Qloo images only) so a Taste ID card can be exported as a PNG.
+    if (url.pathname === "/api/img") {
+      const u = url.searchParams.get("u") || "";
+      if (!/^https:\/\/images\.qloo\.com\//.test(u)) return new Response("bad", { status: 400 });
+      const r = await fetch(u, { cf: { cacheTtl: 86400, cacheEverything: true } });
+      return new Response(r.body, { status: r.status, headers: { "content-type": r.headers.get("content-type") || "image/jpeg", "cache-control": "public, max-age=86400" } });
+    }
     if (url.pathname.startsWith("/api/") && url.pathname !== "/api/blend" && url.pathname !== "/api/health") {
       try {
         const r = await handleSocial(request, env, url);
