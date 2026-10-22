@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TasteBridge · your taste is your ID</title>
+<meta name="description" content="Make a Taste ID from the films, music, books and shows you love. Qloo's taste graph finds people who think like you; wave, match, duel, and plan a night together." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --paper:#f4efe4; --paper-2:#ebe4d4; --ink:#1d1a16; --muted:#6f675b; --a:#e0613f; --b:#2f6fb3; --ab:#7a4f8f; --line:#d6ccb8; --card:#fbf8f1; --radius:14px; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,system-ui,sans-serif; font-size:16px; line-height:1.5; }
+  body { background-image: radial-gradient(circle at 12% -10%, rgba(224,97,63,.12), transparent 40%), radial-gradient(circle at 92% 0%, rgba(47,111,179,.12), transparent 45%); min-height:100vh; }
+  a { color: inherit; }
+  .wrap { max-width:1100px; margin:0 auto; padding:24px 22px 80px; }
+  nav.top { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; font-size:14px; }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.02em; text-decoration:none; }
+  .links { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
+  .links a, .links button { text-decoration:none; padding:7px 12px; border-radius:999px; color:var(--muted); border:0; background:none; font:500 14px Inter,sans-serif; cursor:pointer; }
+  .links a.on, .links a:hover, .links button:hover { color:var(--ink); background:var(--paper-2); }
+  .links .me { color:var(--ink); }
+  h1 { font-family:"Instrument Serif",serif; font-weight:400; font-size:clamp(46px,7.5vw,92px); line-height:.95; margin:56px 0 18px; letter-spacing:-.01em; }
+  h1 em, .grad { font-style:italic; background:linear-gradient(90deg,var(--a),var(--ab) 50%,var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  h2 { font-family:"Instrument Serif",serif; font-weight:400; font-size:clamp(34px,4.6vw,52px); line-height:1; margin:36px 0 10px; }
+  .lede { max-width:640px; font-size:18px; color:#3b352d; margin:0 0 30px; }
+  .sub { color:var(--muted); margin:0 0 22px; max-width:680px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); }
+  .kicker { font:600 11px Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  button.go, a.go { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:999px; border:0; background:var(--ink); color:var(--paper); font:600 15px Inter,sans-serif; cursor:pointer; text-decoration:none; transition:transform .15s; }
+  button.go:hover, a.go:hover { transform:translateY(-1px); }
+  button.go:disabled { opacity:.5; cursor:progress; transform:none; }
+  .ghost { display:inline-flex; align-items:center; gap:6px; padding:11px 18px; border-radius:999px; border:1px solid var(--line); background:transparent; font:500 14.5px Inter,sans-serif; cursor:pointer; color:var(--ink); text-decoration:none; }
+  .ghost:hover { background:var(--paper-2); }
+  input.txt, textarea.txt { width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--line); background:#fff; font:15px Inter,sans-serif; outline:none; color:var(--ink); }
+  input.txt:focus, textarea.txt:focus { border-color:var(--ink); }
+  label.f { display:block; font-size:13px; color:var(--muted); margin:14px 0 6px; }
+  .err { color:#a2301b; font-size:14px; margin-top:10px; min-height:1em; }
+  .muted { color:var(--muted); }
+  .pill { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12.5px; background:#fff; border:1px solid var(--line); white-space:nowrap; }
+  .pills { display:flex; flex-wrap:wrap; gap:6px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+  .spin { display:inline-block; width:14px; height:14px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:sp .8s linear infinite; vertical-align:-2px; }
+  @keyframes sp { to { transform:rotate(360deg); } }
+  @keyframes fade { from { opacity:0; transform:translateY(6px); } }
+  .fade { animation:fade .35s ease both; }
+
+  /* home */
+  .hero { display:grid; grid-template-columns:1.25fr 1fr; gap:34px; align-items:center; }
+  .auth { padding:22px; }
+  .tabs { display:flex; gap:6px; margin-bottom:6px; }
+  .tabs button { flex:1; padding:9px; border-radius:10px; border:1px solid var(--line); background:transparent; font:600 14px Inter,sans-serif; cursor:pointer; color:var(--muted); }
+  .tabs button.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:56px; }
+  .feat .card { padding:20px; }
+  .feat h3 { font-family:"Instrument Serif",serif; font-weight:400; font-size:28px; margin:6px 0 6px; line-height:1.05; }
+  .feat p { margin:0; font-size:14.5px; color:#3b352d; }
+
+  /* taste id card */
+  .tid { position:relative; border-radius:22px; padding:22px 22px 18px; background:#fffdf7; border:1px solid var(--line); overflow:hidden; box-shadow:0 18px 40px -24px rgba(29,26,22,.35); }
+  .tid::before { content:""; position:absolute; inset:0 0 auto 0; height:7px; background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 40%, #fff)); }
+  .tid .glow { position:absolute; right:-80px; top:-80px; width:240px; height:240px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb,var(--c) 26%, transparent), transparent 70%); pointer-events:none; }
+  .tid .row1 { display:flex; justify-content:space-between; align-items:center; font:600 11px Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .tid .who { margin-top:14px; font-size:14px; color:var(--muted); }
+  .tid .who b { color:var(--ink); font-weight:600; font-size:16px; }
+  .tid .arch { font-family:"Instrument Serif",serif; font-size:clamp(34px,4.2vw,46px); line-height:1; margin:6px 0 8px; color:var(--ink); }
+  .tid .tag { font-size:15px; color:#3b352d; margin:0 0 14px; min-height:1.2em; }
+  .tid .posters { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin:6px 0 14px; }
+  .tid .posters figure { margin:0; }
+  .tid .posters .ph { aspect-ratio:2/3; border-radius:8px; background:var(--paper-2) center/cover no-repeat; position:relative; }
+  .tid .posters figcaption { font-size:10.5px; line-height:1.2; color:var(--muted); margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .tid .pills .pill { border-color:color-mix(in srgb,var(--c) 30%, var(--line)); }
+  .tid .foot { display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:12px; color:var(--muted); gap:8px; flex-wrap:wrap; }
+  .demo-badge { font:600 10.5px Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:var(--paper-2); color:var(--muted); }
+  .tid.empty .arch { color:var(--muted); }
+
+  /* editor */
+  .editor { padding:22px; }
+  .favs { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .fav { display:flex; align-items:center; gap:10px; padding:6px 8px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+  .fav .ph { width:30px; height:44px; border-radius:5px; background:var(--paper-2) center/cover no-repeat; flex:none; }
+  .fav .nm { flex:1; font-size:14.5px; line-height:1.25; }
+  .fav .nm small { display:block; color:var(--muted); font-size:12px; }
+  .fav button { border:0; background:none; font-size:18px; color:var(--muted); cursor:pointer; }
+  .searchbox { position:relative; }
+  .results { position:absolute; left:0; right:0; top:calc(100% + 4px); background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 30px -18px rgba(0,0,0,.3); z-index:5; overflow:hidden; }
+  .results button { display:flex; width:100%; align-items:center; gap:10px; padding:8px 10px; border:0; background:#fff; cursor:pointer; text-align:left; font:14.5px Inter,sans-serif; }
+  .results button:hover, .results button.hl { background:var(--paper); }
+  .results .ph { width:28px; height:40px; border-radius:4px; background:var(--paper-2) center/cover no-repeat; flex:none; }
+  .results small { color:var(--muted); display:block; font-size:12px; }
+
+  /* radar */
+  .people { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .person { padding:18px; display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden; }
+  .person .top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .score { font-family:"Instrument Serif",serif; font-size:44px; line-height:.9; }
+  .score small { font:600 11px Inter,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; margin-top:4px; }
+  .person .arch { font-family:"Instrument Serif",serif; font-size:25px; line-height:1.05; }
+  .person .thumbs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .person .thumbs .ph { aspect-ratio:2/3; border-radius:6px; background:var(--paper-2) center/cover no-repeat; }
+  .person .blind { font-size:13px; color:var(--muted); }
+  .person .acts { display:flex; gap:8px; margin-top:auto; flex-wrap:wrap; }
+  .person .acts button, .person .acts a { padding:9px 14px; font-size:14px; }
+  .bar { height:5px; border-radius:5px; background:var(--paper-2); overflow:hidden; }
+  .bar i { display:block; height:100%; background:linear-gradient(90deg,var(--a),var(--ab),var(--b)); }
+  .ribbon { position:absolute; top:12px; right:-34px; transform:rotate(35deg); background:var(--ab); color:#fff; font:600 10.5px Inter,sans-serif; letter-spacing:.08em; padding:4px 40px; text-transform:uppercase; }
+
+  /* match + duel */
+  .panel { padding:22px; }
+  .matchnum { font-family:"Instrument Serif",serif; font-size:84px; line-height:.9; }
+  .opener { font-family:"Instrument Serif",serif; font-size:26px; line-height:1.2; margin:8px 0 14px; }
+  .together { display:flex; gap:14px; align-items:center; margin-top:10px; }
+  .together .ph { width:64px; height:96px; border-radius:8px; background:var(--paper-2) center/cover no-repeat; flex:none; }
+  .q { font-family:"Instrument Serif",serif; font-size:clamp(30px,4vw,44px); line-height:1.05; margin:10px 0 22px; }
+  .opts { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .opts.two { grid-template-columns:repeat(2,1fr); max-width:620px; }
+  .opt { padding:0; overflow:hidden; cursor:pointer; text-align:left; font:inherit; color:inherit; transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; }
+  .opt:hover { transform:translateY(-3px); box-shadow:0 14px 30px -20px rgba(0,0,0,.4); }
+  .opt .ph { aspect-ratio:3/4; background:var(--paper-2) center/cover no-repeat; }
+  .opt .nm { padding:12px 14px; font-family:"Instrument Serif",serif; font-size:22px; line-height:1.1; }
+  .opt .nm small { display:block; font:12px Inter,sans-serif; color:var(--muted); margin-top:4px; text-transform:capitalize; }
+  .opt.right { outline:3px solid #2f8f6b; } .opt.wrong { outline:3px solid #a2301b; opacity:.8; }
+  .progress { display:flex; gap:6px; margin:12px 0 0; max-width:420px; } .progress i { flex:1; height:4px; border-radius:4px; background:var(--paper-2); } .progress i.on { background:var(--ink); }
+  .review { display:grid; gap:10px; margin-top:18px; }
+  .review .ln { display:flex; gap:12px; align-items:center; padding:10px 12px; }
+  .review .ph { width:36px; height:54px; border-radius:5px; background:var(--paper-2) center/cover no-repeat; flex:none; }
+  .list { display:grid; gap:10px; }
+  .list a { display:flex; justify-content:space-between; padding:14px 16px; text-decoration:none; }
+  footer { margin-top:70px; font-size:13px; color:var(--muted); border-top:1px solid var(--line); padding-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:999px; font-size:14px; z-index:20; animation:fade .25s ease; }
+
+  @media (max-width: 860px) {
+    .hero, .grid2, .feat { grid-template-columns:1fr; }
+    .people { grid-template-columns:1fr 1fr; }
+    .opts { grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  }
+  @media (max-width: 560px) {
+    .people { grid-template-columns:1fr; }
+    .opts .nm { font-size:17px; padding:8px 10px; }
+    h1 { margin-top:34px; }
+    .tid .posters { grid-template-columns:repeat(4,1fr); }
+    .tid .posters figure:nth-child(n+5) { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <a class="brand" href="#/">
+      <svg width="34" height="22" viewBox="0 0 34 22"><circle cx="11" cy="11" r="10" fill="#e0613f" opacity=".85"/><circle cx="23" cy="11" r="10" fill="#2f6fb3" opacity=".85" style="mix-blend-mode:multiply"/></svg>
+      TasteBridge
+    </a>
+    <div class="links" id="links"></div>
+  </nav>
+  <main id="view"></main>
+  <footer>
+    <span>Built for the Qloo Agentic Hackathon by Q1f730. Every match, tag and recommendation comes from Qloo's taste graph; AI only names and explains.</span>
+    <span><a href="/quick">Quick two-person mode</a> · <a href="https://github.com/q1f0730/tastebridge" target="_blank" rel="noopener">MIT · GitHub</a></span>
+  </footer>
+</div>
+
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const bg = (url) => (url ? `background-image:url('${esc(url)}')` : "");
+const dom = (d) => String(d || "").replace("_", " ").replace("tv show", "series");
+const S = { me: null, card: null };
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { ...opts, headers: { "content-type": "application/json", ...(opts.headers || {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.error || `HTTP ${res.status}`), { status: res.status });
+  return data;
+}
+function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
+async function loadMe() { const r = await api("/api/me"); S.me = r.user; S.card = r.card || null; }
+const view = $("#view");
+
+function nav() {
+  const r = location.hash.split("/")[1] || "";
+  const L = (h, t, k) => `<a href="#/${h}" class="${r === k ? "on" : ""}">${t}</a>`;
+  $("#links").innerHTML = S.me
+    ? L("radar", "Taste Radar", "radar") + L("duels", "Duels", "duels") + L("me", "My Taste ID", "me") + `<a class="me" href="#/u/${esc(S.me.handle)}">@${esc(S.me.handle)}</a><button id="out">Sign out</button>`
+    : `<a href="/quick">Quick mode</a>` + L("", "Sign in", "x");
+  const o = $("#out"); if (o) o.onclick = async () => { await api("/api/logout", { method: "POST" }); S.me = null; location.hash = "#/"; route(); };
+}
+
+// ---------- Taste ID card ----------
+function tasteCard(c, { handle, display } = {}) {
+  const favs = (c.favorites || []).slice(0, 5);
+  const empty = !c.archetype;
+  return `<div class="tid ${empty ? "empty" : ""}" style="--c:${esc(c.color || "#7a4f8f")}">
+    <div class="glow"></div>
+    <div class="row1"><span>Taste ID</span><span>${c.demo ? '<span class="demo-badge">Demo persona</span>' : "TasteBridge"}</span></div>
+    <div class="who"><b>${esc(display || c.display || "")}</b> ${handle || c.handle ? `· @${esc(handle || c.handle)}` : ""}${c.city ? ` · ${esc(c.city)}` : ""}</div>
+    <div class="arch">${esc(empty ? "Add 3+ favorites" : c.archetype)}</div>
+    <p class="tag">${esc(empty ? "Qloo reads them and names your taste." : c.tagline)}</p>
+    <div class="posters">${favs.map((f) => `<figure><div class="ph" style="${bg(f.image)}"></div><figcaption>${esc(f.name)}</figcaption></figure>`).join("")}</div>
+    <div class="pills">${(c.tags || []).slice(0, 7).map((t) => `<span class="pill">${esc(t.name)}</span>`).join("")}</div>
+    <div class="foot"><span>${c.bio ? esc(c.bio) : ""}</span><span>Taste graph by Qloo</span></div>
+  </div>`;
+}
+
+// ---------- views ----------
+async function home() {
+  if (S.me) { location.hash = S.card && S.card.complete ? "#/radar" : "#/me"; return; }
+  view.innerHTML = `<div class="hero fade">
+    <div>
+      <h1>Your taste<br/><em>is your ID.</em></h1>
+      <p class="lede">Pick the films, shows, music, books and podcasts you love. Qloo's taste graph turns them into a Taste ID, then finds people who think like you. Wave, match, duel, and plan a night together.</p>
+      <button class="ghost" id="demo">Try it as a demo user →</button>
+    </div>
+    <form class="auth card" id="auth" autocomplete="on">
+      <div class="tabs"><button type="button" data-t="up" class="on">Create account</button><button type="button" data-t="in">Sign in</button></div>
+      <label class="f">Username</label><input class="txt" name="handle" autocomplete="username" placeholder="lowercase, e.g. moviebuff_42" maxlength="20" required />
+      <label class="f">Password</label><input class="txt" name="password" type="password" autocomplete="new-password" placeholder="6+ characters" required />
+      <div style="margin-top:16px"><button class="go" type="submit" id="authgo">Create my Taste ID</button></div>
+      <div class="err" id="err"></div>
+    </form>
+  </div>
+  <div class="feat">
+    <div class="card"><div class="kicker">01 · Taste ID</div><h3>A card that says who you are</h3><p>Qloo reads your favorites across domains, pulls the taste tags they share, and AI names your persona.</p></div>
+    <div class="card"><div class="kicker">02 · Taste Radar</div><h3>Blind matches by taste</h3><p>See people ranked by how close their taste graph is to yours. Names stay hidden until you both wave.</p></div>
+    <div class="card"><div class="kicker">03 · Duel & Bridge</div><h3>Play, then plan</h3><p>Test how well you know a friend's taste, or let the agent plan a night you'll both enjoy.</p></div>
+  </div>`;
+  let mode = "up";
+  $$(".tabs button").forEach((b) => (b.onclick = () => {
+    mode = b.dataset.t; $$(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
+    $("#authgo").textContent = mode === "up" ? "Create my Taste ID" : "Sign in";
+    $("#auth [name=password]").autocomplete = mode === "up" ? "new-password" : "current-password";
+  }));
+  $("#auth").onsubmit = async (e) => {
+    e.preventDefault(); const f = new FormData(e.target); $("#err").textContent = "";
+    $("#authgo").disabled = true;
+    try { await api(mode === "up" ? "/api/signup" : "/api/login", { method: "POST", body: { handle: f.get("handle"), password: f.get("password") } }); await loadMe(); route(); }
+    catch (er) { $("#err").textContent = er.message; } finally { $("#authgo").disabled = false; }
+  };
+  $("#demo").onclick = async () => {
+    try { await api("/api/login", { method: "POST", body: { handle: "demo", password: "tastebridge" } }); await loadMe(); location.hash = "#/radar"; route(); }
+    catch (er) { $("#err").textContent = er.message; }
+  };
+}
+
+async function editor() {
+  if (!S.me) return (location.hash = "#/");
+  const c = S.card || {};
+  const st = { favs: [...(c.favorites || [])] };
+  view.innerHTML = `<h2>Your <span class="grad">Taste ID</span></h2><p class="sub">Add 3 to 10 favorites from different worlds: a film, a series, an artist, a book, a podcast. The more varied, the sharper your card and your matches.</p>
+  <div class="grid2">
+    <div class="editor card">
+      <label class="f" style="margin-top:0">Display name</label><input class="txt" id="display" maxlength="30" value="${esc(c.display || S.me.handle)}" />
+      <label class="f">Favorites <span id="cnt"></span></label>
+      <div class="searchbox"><input class="txt" id="q" placeholder="Search Qloo: Interstellar, Frank Ocean, Dune…" autocomplete="off" /><div class="results" id="res" hidden></div></div>
+      <div class="favs" id="favs"></div>
+      <label class="f">City (optional, used for places to go together)</label><input class="txt" id="city" maxlength="60" value="${esc(c.city || "")}" placeholder="e.g. Shanghai, New York" />
+      <label class="f">One-line bio (optional)</label><input class="txt" id="bio" maxlength="160" value="${esc(c.bio || "")}" placeholder="Rewatcher of comfort films, hunter of B-sides" />
+      <div style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="go" id="save">Save & read my taste</button><span class="muted" id="status"></span></div>
+      <div class="err" id="err"></div>
+    </div>
+    <div><div id="preview">${tasteCard(c, { handle: S.me.handle })}</div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" id="after">${c.complete ? afterSave() : ""}</div></div>
+  </div>`;
+  const renderFavs = () => {
+    $("#favs").innerHTML = st.favs.map((f, i) => `<div class="fav"><div class="ph" style="${bg(f.image)}"></div><div class="nm">${esc(f.name)}<small>${esc(dom(f.domain))}${f.year ? " · " + esc(f.year) : ""}</small></div><button aria-label="Remove" data-i="${i}">×</button></div>`).join("");
+    $$("#favs button").forEach((b) => (b.onclick = () => { st.favs.splice(+b.dataset.i, 1); renderFavs(); }));
+    $("#cnt").textContent = `(${st.favs.length}/10)`;
+  };
+  renderFavs();
+  let timer, seq = 0, hits = [], hl = -1;
+  const q = $("#q"), res = $("#res");
+  const choose = (h) => { if (st.favs.length >= 10) return toast("10 is the max"); if (!st.favs.some((f) => f.id === h.id)) st.favs.push(h); q.value = ""; res.hidden = true; renderFavs(); q.focus(); };
+  const paint = () => {
+    res.innerHTML = hits.length ? hits.map((h, i) => `<button type="button" data-i="${i}" class="${i === hl ? "hl" : ""}"><div class="ph" style="${bg(h.image)}"></div><div>${esc(h.name)}<small>${esc(dom(h.domain))}${h.year ? " · " + esc(h.year) : ""}</small></div></button>`).join("") : `<div style="padding:10px 12px" class="muted">No match in Qloo yet</div>`;
+    res.hidden = false; $$("#res button").forEach((b) => (b.onmousedown = (e) => { e.preventDefault(); choose(hits[+b.dataset.i]); }));
+  };
+  q.oninput = () => {
+    clearTimeout(timer); const v = q.value.trim(); if (v.length < 2) { res.hidden = true; return; }
+    timer = setTimeout(async () => { const my = ++seq; res.innerHTML = `<div style="padding:10px 12px" class="muted"><span class="spin"></span> Searching Qloo…</div>`; res.hidden = false;
+      const r = await api("/api/search?q=" + encodeURIComponent(v)).catch(() => ({ results: [] })); if (my !== seq) return; hits = r.results; hl = 0; paint(); }, 280);
+  };
+  q.onkeydown = (e) => {
+    if (res.hidden || !hits.length) return;
+    if (e.key === "ArrowDown") { hl = Math.min(hits.length - 1, hl + 1); paint(); e.preventDefault(); }
+    else if (e.key === "ArrowUp") { hl = Math.max(0, hl - 1); paint(); e.preventDefault(); }
+    else if (e.key === "Enter") { e.preventDefault(); choose(hits[Math.max(0, hl)]); }
+    else if (e.key === "Escape") res.hidden = true;
+  };
+  q.onblur = () => setTimeout(() => (res.hidden = true), 150);
+  $("#save").onclick = async () => {
+    if (st.favs.length < 3) { $("#err").textContent = "Add at least 3 favorites so Qloo has something to read."; return; }
+    $("#err").textContent = ""; $("#save").disabled = true; $("#status").innerHTML = `<span class="spin"></span> Qloo is reading your taste graph…`;
+    try {
+      const r = await api("/api/profile", { method: "POST", body: { display: $("#display").value, city: $("#city").value, bio: $("#bio").value, favorites: st.favs } });
+      S.card = r.card; $("#preview").innerHTML = tasteCard(r.card, { handle: S.me.handle }); $("#after").innerHTML = afterSave(); bindAfter();
+      $("#status").textContent = "Saved.";
+    } catch (er) { $("#err").textContent = er.message; $("#status").textContent = ""; }
+    finally { $("#save").disabled = false; }
+  };
+  bindAfter();
+}
+function afterSave() { return `<a class="go" href="#/radar">Find my taste twins →</a><button class="ghost" id="share">Copy my card link</button>`; }
+function bindAfter() { const s = $("#share"); if (s) s.onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${S.me.handle}`); toast("Link copied"); }; }
+
+async function profile(handle) {
+  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Loading card…</p>`;
+  let r; try { r = await api("/api/card/" + encodeURIComponent(handle)); } catch (e) { view.innerHTML = `<h2>Not found</h2><p class="sub">${esc(e.message)}</p>`; return; }
+  const c = r.card, mine = S.me && S.me.handle === c.handle;
+  const m = r.match;
+  view.innerHTML = `<div class="grid2 fade" style="margin-top:34px">
+    <div>${tasteCard(c)}</div>
+    <div class="panel card">
+      ${mine ? `<div class="kicker">This is you</div><h2 style="margin-top:8px">Share your card</h2><p class="sub">Send this link to a friend. When they sign in, they'll see how close your tastes are and can duel you or plan a night with you.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="go" id="share">Copy link</button><a class="ghost" href="#/me">Edit card</a></div>`
+      : !S.me ? `<div class="kicker">How close are your tastes?</div><h2 style="margin-top:8px">Make your own Taste ID to compare</h2><p class="sub">Sign up in 20 seconds and see your match with ${esc(c.display)}.</p><a class="go" href="#/">Create my Taste ID</a>`
+      : !m ? `<div class="kicker">Almost there</div><h2 style="margin-top:8px">Finish your card to compare</h2><a class="go" href="#/me">Add favorites</a>`
+      : `<div class="kicker">You × ${esc(c.display)}</div><div class="matchnum">${m.score}%</div><div class="bar" style="margin:8px 0 14px"><i style="width:${m.score}%"></i></div>
+        ${m.both_love && m.both_love.length ? `<p class="sub" style="margin-bottom:10px">You both put <b>${m.both_love.map(esc).join(", ")}</b> on your cards.</p>` : ""}<p class="sub" style="margin-bottom:10px">Taste match from Qloo's taste graph. You share:</p><div class="pills" style="margin-bottom:20px">${m.shared.map((t) => `<span class="pill">${esc(t.name)}</span>`).join("") || '<span class="muted">a thin thread, which makes it interesting</span>'}</div>
+        ${m.picks && m.picks.length ? `<p class="sub" style="margin-bottom:8px">Qloo would recommend both of you:</p><div class="pills" style="margin-bottom:20px">${m.picks.map((x) => `<span class="pill">${esc(x.name)}</span>`).join("")}</div>` : ""}
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="go" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="ghost" id="duel">Duel: how well do I know them?</button></div><div class="err" id="err"></div>`}
+    </div></div>`;
+  const s = $("#share"); if (s) s.onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${c.handle}`); toast("Link copied"); };
+  const d = $("#duel"); if (d) d.onclick = () => startDuel(c.handle, d);
+}
+
+async function startDuel(handle, btn) {
+  btn.disabled = true; const t = btn.textContent; btn.innerHTML = `<span class="spin"></span> Building rounds from Qloo…`;
+  try { const r = await api("/api/duel", { method: "POST", body: { handle } }); location.hash = "#/duel/" + r.id; }
+  catch (e) { const er = $("#err"); if (er) er.textContent = e.message; else toast(e.message); btn.disabled = false; btn.textContent = t; }
+}
+
+async function radar() {
+  if (!S.me) return (location.hash = "#/");
+  view.innerHTML = `<h2>Taste <span class="grad">Radar</span></h2><p class="sub">People ranked by how close their Qloo taste graph is to yours. Cards stay anonymous: you see their persona and a few favorites. Wave, and if they wave back, you're revealed to each other.</p><div id="ppl"><p class="muted"><span class="spin"></span> Comparing taste graphs…</p></div>`;
+  let r; try { r = await api("/api/radar"); } catch (e) { $("#ppl").innerHTML = `<p class="err">${esc(e.message)}</p>`; return; }
+  if (r.needsCard) { $("#ppl").innerHTML = `<div class="panel card"><h3 style="margin:0 0 6px">Your card needs 3+ favorites first</h3><a class="go" href="#/me">Make my Taste ID</a></div>`; return; }
+  $("#ppl").innerHTML = `<div class="people">${r.people.map(personCard).join("")}</div>`;
+  $$("[data-wave]").forEach((b) => (b.onclick = async () => {
+    b.disabled = true; b.innerHTML = `<span class="spin"></span>`;
+    try { const w = await api("/api/wave/" + b.dataset.wave, { method: "POST" }); if (w.mutual) { toast("It's a match! Revealing…"); location.hash = "#/match/" + b.dataset.wave; } else { b.textContent = "Waved"; } }
+    catch (e) { toast(e.message); b.disabled = false; b.textContent = "Wave"; }
+  }));
+}
+function personCard(p) {
+  const t = (p.favorites || []).slice(0, 4);
+  return `<div class="person card fade" style="--c:${esc(p.color)}">
+    ${p.wavedYou ? '<div class="ribbon">Waved at you</div>' : ""}
+    <div class="top"><div class="score">${p.match}%<small>taste match</small></div>${p.demo ? '<span class="demo-badge">Demo</span>' : ""}</div>
+    <div class="bar"><i style="width:${p.match}%"></i></div>
+    <div class="arch">${esc(p.archetype)}</div>
+    <div class="blind">${p.mutual ? `<b style="color:var(--ink)">${esc(p.display)}</b> · @${esc(p.handle)}` : "Identity hidden until you both wave"}${p.city ? " · " + esc(p.city) : ""}</div>
+    <div class="thumbs">${t.map((f) => `<div class="ph" title="${esc(f.name)}" style="${bg(f.image)}"></div>`).join("")}</div>
+    <div class="pills">${(p.shared || []).slice(0, 3).map((s) => `<span class="pill">${esc(s.name)}</span>`).join("")}</div>
+    <div class="acts">${p.mutual ? `<a class="go" href="#/match/${p.uid}">Open match</a>` : p.waved ? `<button class="ghost" disabled>Waved</button>` : `<button class="go" data-wave="${p.uid}">${p.wavedYou ? "Wave back" : "Wave"}</button>`}</div>
+  </div>`;
+}
+
+async function match(uid) {
+  if (!S.me) return (location.hash = "#/");
+  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Qloo is comparing your taste graphs and finding something for you both…</p>`;
+  let r; try { r = await api("/api/match/" + uid); } catch (e) { view.innerHTML = `<h2>Not yet</h2><p class="sub">${esc(e.message)}</p><a class="ghost" href="#/radar">Back to radar</a>`; return; }
+  const c = r.card, tg = r.together;
+  view.innerHTML = `<div class="kicker" style="margin-top:34px">It's a match</div><h2 style="margin-top:6px">You × <span class="grad">${esc(c.display)}</span> · ${r.match.score}%</h2>
+  <div class="grid2 fade" style="margin-top:20px">
+    <div>${tasteCard(c)}</div>
+    <div class="panel card">
+      <div class="kicker">Why you click</div><p style="font-size:17px;margin:8px 0 12px">${esc(r.why)}</p>
+      <div class="pills" style="margin-bottom:18px">${(r.shared.length ? r.shared : r.match.shared).slice(0, 6).map((t) => `<span class="pill">${esc(t.name)}</span>`).join("")}</div>
+      ${tg ? `<div class="kicker">Qloo says you'd both enjoy</div><div class="together"><div class="ph" style="${bg(tg.image)}"></div><div><b>${esc(tg.name)}</b>${tg.year ? ` <span class="muted">(${esc(tg.year)})</span>` : ""}<div class="muted" style="font-size:14px">${esc((tg.description || "").slice(0, 140))}</div></div></div>` : ""}
+      <div class="kicker" style="margin-top:20px">Your first message, drafted from your tastes</div><div class="opener">“${esc(r.opener)}”</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="copy">Copy message</button><a class="go" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="ghost" id="duel">Duel them</button></div>
+      <div class="err" id="err"></div>
+    </div></div>`;
+  $("#copy").onclick = () => { navigator.clipboard.writeText(r.opener); toast("Copied"); };
+  $("#duel").onclick = () => startDuel(c.handle, $("#duel"));
+}
+
+async function duel(id) {
+  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Loading duel…</p>`;
+  let d; try { d = await api("/api/duel/" + id); } catch (e) { view.innerHTML = `<h2>Duel not found</h2>`; return; }
+  if (d.finished) return duelResult(d);
+  if (!d.mine) { view.innerHTML = `<h2>@${esc(d.creator)} is testing how well they know @${esc(d.target)}</h2><p class="sub">Results appear here once they finish.</p>`; return; }
+  const answers = [];
+  const step = (i) => {
+    if (i >= d.rounds.length) return submit();
+    const r = d.rounds[i];
+    const q = r.kind === "pick" ? `Which of these is actually on <span class="grad">${esc(d.target_display)}</span>'s card?` : `Qloo thinks ${esc(d.target_display)} would enjoy one of these far more. Which?`;
+    view.innerHTML = `<div class="fade" style="margin-top:34px"><div class="kicker">Taste Duel · round ${i + 1} of ${d.rounds.length}</div><div class="progress">${d.rounds.map((_, k) => `<i class="${k <= i ? "on" : ""}"></i>`).join("")}</div>
+      <div class="q">${q}</div>
+      <div class="opts ${r.options.length === 2 ? "two" : ""}">${r.options.map((o) => `<button class="opt card" data-id="${esc(o.id)}"><div class="ph" style="${bg(o.image)}"></div><div class="nm">${esc(o.name)}<small>${esc(dom(o.domain))}${o.year ? " · " + esc(o.year) : ""}</small></div></button>`).join("")}</div></div>`;
+    $$(".opt").forEach((b) => (b.onclick = () => { answers.push(b.dataset.id); step(i + 1); }));
+  };
+  const submit = async () => {
+    view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Scoring…</p>`;
+    try { duelResult(await api(`/api/duel/${id}/answer`, { method: "POST", body: { answers } })); } catch (e) { view.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+  };
+  step(0);
+}
+function duelResult(d) {
+  const n = d.rounds.length, s = d.score;
+  const verdict = s === n ? "Basically telepathic." : s >= n - 1 ? "You really get their taste." : s >= n / 2 ? "Solid, with a few surprises." : "Their taste still has secrets. Ask them about it.";
+  view.innerHTML = `<div class="fade" style="margin-top:34px"><div class="kicker">Taste Duel · @${esc(d.creator)} on @${esc(d.target)}</div>
+    <div class="matchnum">${s}/${n}</div><h2 style="margin-top:4px">${verdict}</h2>
+    <div class="review">${d.rounds.map((r, i) => { const ans = r.options.find((o) => o.id === r.answer) || {}; const ok = d.answers[i] === r.answer;
+      return `<div class="ln card"><div class="ph" style="${bg(ans.image)}"></div><div style="flex:1"><div class="muted" style="font-size:12.5px">${r.kind === "pick" ? "Really on their card" : "Qloo's pick for their taste"}</div><b>${esc(ans.name)}</b></div><span style="font-size:20px">${ok ? "✓" : "✗"}</span></div>`; }).join("")}</div>
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">${S.me ? `<a class="go" href="/bridge?a=${esc(d.creator)}&b=${esc(d.target)}">Plan a night together</a>` : ""}<button class="ghost" id="share">Copy result link</button><a class="ghost" href="#/u/${esc(d.target)}">View their card</a></div></div>`;
+  $("#share").onclick = () => { navigator.clipboard.writeText(location.href); toast("Link copied"); };
+}
+
+async function duels() {
+  if (!S.me) return (location.hash = "#/");
+  view.innerHTML = `<h2>Taste <span class="grad">Duels</span></h2><p class="sub">Pick anyone's card and test how well you know their taste. Rounds are built from Qloo: their real favorites hidden among look-alikes, and Qloo's own predictions.</p>
+    <div class="panel card" style="margin-bottom:18px"><label class="f" style="margin-top:0">Duel someone by username</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="txt" id="h" placeholder="e.g. mira_reads" style="flex:1;min-width:200px" /><button class="go" id="go">Start duel</button></div><div class="err" id="err"></div></div>
+    <div class="list" id="list"><p class="muted"><span class="spin"></span></p></div>`;
+  $("#go").onclick = () => { const h = $("#h").value.trim().replace(/^@/, ""); if (h) startDuel(h, $("#go")); };
+  const r = await api("/api/duels").catch(() => ({ duels: [] }));
+  $("#list").innerHTML = r.duels.length ? r.duels.map((x) => `<a class="card" href="#/duel/${x.id}"><span>@${esc(x.creator)} → @${esc(x.target)}</span><span class="muted">${x.score == null ? "not played yet" : `${x.score}/${x.total}`}</span></a>`).join("") : `<p class="muted">No duels yet. Open someone's card from the radar, or try <a href="#/u/mira_reads">@mira_reads</a>.</p>`;
+}
+
+async function route() {
+  if (location.pathname.startsWith("/u/")) { history.replaceState(null, "", "/#/u/" + location.pathname.slice(3)); }
+  if (location.pathname.startsWith("/duel/")) { history.replaceState(null, "", "/#/duel/" + location.pathname.slice(6)); }
+  const [, r, arg] = location.hash.split("/");
+  nav();
+  window.scrollTo(0, 0);
+  if (r === "me") return editor();
+  if (r === "radar") return radar();
+  if (r === "duels") return duels();
+  if (r === "u" && arg) return profile(decodeURIComponent(arg));
+  if (r === "match" && arg) return match(arg);
+  if (r === "duel" && arg) return duel(arg);
+  return home();
+}
+window.addEventListener("hashchange", route);
+loadMe().catch(() => {}).finally(route);
+</script>
+</body>
+</html>
