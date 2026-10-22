@@ -4,169 +4,274 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>TasteBridge · your taste is your ID</title>
-<meta name="description" content="Make a Taste ID from the films, music, books and shows you love. Qloo's taste graph finds people who think like you; wave, match, duel, and plan a night together." />
+<meta name="description" content="Pick the films, shows, music, books and podcasts you love. Qloo's taste graph turns them into a Taste ID and finds people who think like you." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  :root { --paper:#f4efe4; --paper-2:#ebe4d4; --ink:#1d1a16; --muted:#6f675b; --a:#e0613f; --b:#2f6fb3; --ab:#7a4f8f; --line:#d6ccb8; --card:#fbf8f1; --radius:14px; }
-  * { box-sizing: border-box; }
-  html, body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,system-ui,sans-serif; font-size:16px; line-height:1.5; }
-  body { background-image: radial-gradient(circle at 12% -10%, rgba(224,97,63,.12), transparent 40%), radial-gradient(circle at 92% 0%, rgba(47,111,179,.12), transparent 45%); min-height:100vh; }
-  a { color: inherit; }
-  .wrap { max-width:1100px; margin:0 auto; padding:24px 22px 80px; }
-  nav.top { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; font-size:14px; }
-  .brand { display:flex; align-items:center; gap:10px; font-weight:600; letter-spacing:.02em; text-decoration:none; }
-  .links { display:flex; gap:4px; align-items:center; flex-wrap:wrap; }
-  .links a, .links button { text-decoration:none; padding:7px 12px; border-radius:999px; color:var(--muted); border:0; background:none; font:500 14px Inter,sans-serif; cursor:pointer; }
-  .links a.on, .links a:hover, .links button:hover { color:var(--ink); background:var(--paper-2); }
-  .links .me { color:var(--ink); }
-  h1 { font-family:"Instrument Serif",serif; font-weight:400; font-size:clamp(46px,7.5vw,92px); line-height:.95; margin:56px 0 18px; letter-spacing:-.01em; }
-  h1 em, .grad { font-style:italic; background:linear-gradient(90deg,var(--a),var(--ab) 50%,var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  h2 { font-family:"Instrument Serif",serif; font-weight:400; font-size:clamp(34px,4.6vw,52px); line-height:1; margin:36px 0 10px; }
-  .lede { max-width:640px; font-size:18px; color:#3b352d; margin:0 0 30px; }
-  .sub { color:var(--muted); margin:0 0 22px; max-width:680px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); }
-  .kicker { font:600 11px Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-  button.go, a.go { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:999px; border:0; background:var(--ink); color:var(--paper); font:600 15px Inter,sans-serif; cursor:pointer; text-decoration:none; transition:transform .15s; }
-  button.go:hover, a.go:hover { transform:translateY(-1px); }
-  button.go:disabled { opacity:.5; cursor:progress; transform:none; }
-  .ghost { display:inline-flex; align-items:center; gap:6px; padding:11px 18px; border-radius:999px; border:1px solid var(--line); background:transparent; font:500 14.5px Inter,sans-serif; cursor:pointer; color:var(--ink); text-decoration:none; }
-  .ghost:hover { background:var(--paper-2); }
-  input.txt, textarea.txt { width:100%; padding:11px 13px; border-radius:10px; border:1px solid var(--line); background:#fff; font:15px Inter,sans-serif; outline:none; color:var(--ink); }
-  input.txt:focus, textarea.txt:focus { border-color:var(--ink); }
-  label.f { display:block; font-size:13px; color:var(--muted); margin:14px 0 6px; }
-  .err { color:#a2301b; font-size:14px; margin-top:10px; min-height:1em; }
-  .muted { color:var(--muted); }
-  .pill { display:inline-flex; align-items:center; padding:4px 10px; border-radius:999px; font-size:12.5px; background:#fff; border:1px solid var(--line); white-space:nowrap; }
-  .pills { display:flex; flex-wrap:wrap; gap:6px; }
-  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
-  .spin { display:inline-block; width:14px; height:14px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:sp .8s linear infinite; vertical-align:-2px; }
-  @keyframes sp { to { transform:rotate(360deg); } }
-  @keyframes fade { from { opacity:0; transform:translateY(6px); } }
-  .fade { animation:fade .35s ease both; }
+:root{
+  --bg:#f6f4ef; --surface:#ffffff; --ink:#15130f; --ink2:#4a463e; --muted:#8a8478; --line:#e6e1d6; --line2:#d8d1c2;
+  --tomato:#ff5b36; --cobalt:#3557ff; --lilac:#b7a4ff; --butter:#ffd25e; --mint:#6fd6ac; --pink:#ff8fb8;
+  --movie:#ff5b36; --tv_show:#3557ff; --artist:#b05cff; --book:#e5a100; --podcast:#18a86b;
+  --r:22px; --shadow:0 1px 0 rgba(21,19,15,.04), 0 18px 40px -26px rgba(21,19,15,.28);
+  --display:"Bricolage Grotesque",system-ui,sans-serif; --serif:"Instrument Serif",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+a{color:inherit}
+button{font-family:inherit}
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:18px 24px 90px}
+.mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.serif{font-family:var(--serif);font-weight:400;font-style:italic}
 
-  /* home */
-  .hero { display:grid; grid-template-columns:1.25fr 1fr; gap:34px; align-items:center; }
-  .auth { padding:22px; }
-  .tabs { display:flex; gap:6px; margin-bottom:6px; }
-  .tabs button { flex:1; padding:9px; border-radius:10px; border:1px solid var(--line); background:transparent; font:600 14px Inter,sans-serif; cursor:pointer; color:var(--muted); }
-  .tabs button.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
-  .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:56px; }
-  .feat .card { padding:20px; }
-  .feat h3 { font-family:"Instrument Serif",serif; font-weight:400; font-size:28px; margin:6px 0 6px; line-height:1.05; }
-  .feat p { margin:0; font-size:14.5px; color:#3b352d; }
+/* nav */
+nav.top{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 0 10px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:-.02em;text-decoration:none}
+.brand .logo{display:flex}.brand .logo i{width:20px;height:20px;border-radius:50%;display:block}
+.brand .logo i:first-child{background:var(--tomato)}.brand .logo i:last-child{background:var(--cobalt);margin-left:-8px;mix-blend-mode:multiply}
+.links{display:flex;gap:2px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.links a,.links button{text-decoration:none;padding:8px 14px;border-radius:999px;color:var(--ink2);border:0;background:none;font:500 14px var(--display);cursor:pointer}
+.links a.on{background:var(--ink);color:#fff}
+.links a:not(.on):hover,.links button:hover{background:var(--bg)}
+.links .me{font-family:var(--mono);font-size:12.5px}
 
-  /* taste id card */
-  .tid { position:relative; border-radius:22px; padding:22px 22px 18px; background:#fffdf7; border:1px solid var(--line); overflow:hidden; box-shadow:0 18px 40px -24px rgba(29,26,22,.35); }
-  .tid::before { content:""; position:absolute; inset:0 0 auto 0; height:7px; background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 40%, #fff)); }
-  .tid .glow { position:absolute; right:-80px; top:-80px; width:240px; height:240px; border-radius:50%; background:radial-gradient(circle, color-mix(in srgb,var(--c) 26%, transparent), transparent 70%); pointer-events:none; }
-  .tid .row1 { display:flex; justify-content:space-between; align-items:center; font:600 11px Inter,sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-  .tid .who { margin-top:14px; font-size:14px; color:var(--muted); }
-  .tid .who b { color:var(--ink); font-weight:600; font-size:16px; }
-  .tid .arch { font-family:"Instrument Serif",serif; font-size:clamp(34px,4.2vw,46px); line-height:1; margin:6px 0 8px; color:var(--ink); }
-  .tid .tag { font-size:15px; color:#3b352d; margin:0 0 14px; min-height:1.2em; }
-  .tid .posters { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin:6px 0 14px; }
-  .tid .posters figure { margin:0; }
-  .tid .posters .ph { aspect-ratio:2/3; border-radius:8px; background:var(--paper-2) center/cover no-repeat; position:relative; }
-  .tid .posters figcaption { font-size:10.5px; line-height:1.2; color:var(--muted); margin-top:4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-  .tid .pills .pill { border-color:color-mix(in srgb,var(--c) 30%, var(--line)); }
-  .tid .foot { display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:12px; color:var(--muted); gap:8px; flex-wrap:wrap; }
-  .demo-badge { font:600 10.5px Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase; padding:3px 8px; border-radius:999px; background:var(--paper-2); color:var(--muted); }
-  .tid.empty .arch { color:var(--muted); }
+/* buttons, inputs */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:999px;border:0;background:var(--ink);color:#fff;font:600 15px var(--display);cursor:pointer;text-decoration:none;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .2s,background .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(21,19,15,.5)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.hot{background:var(--tomato)}
+.btn.line{background:var(--surface);color:var(--ink);border:1px solid var(--line2)}
+.btn.line:hover{background:var(--bg)}
+.btn.sm{padding:9px 15px;font-size:14px}
+.inp{width:100%;padding:13px 15px;border-radius:14px;border:1px solid var(--line2);background:var(--surface);font:15px var(--display);outline:none;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.inp:focus{border-color:var(--ink);box-shadow:0 0 0 4px rgba(21,19,15,.06)}
+label.f{display:block;margin:16px 0 7px}
+.err{color:#c2361a;font-size:14px;margin-top:10px;min-height:1.2em}
+.muted{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:13.5px;background:var(--surface);border:1px solid var(--line2);white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.spin{display:inline-block;width:15px;height:15px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.rise{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+h1.big{font-weight:800;font-size:clamp(52px,8.4vw,124px);line-height:.88;letter-spacing:-.045em;margin:0}
+h1.big .serif{letter-spacing:-.02em;font-weight:400}
+h2.ttl{font-weight:800;font-size:clamp(40px,5.4vw,76px);line-height:.92;letter-spacing:-.04em;margin:26px 0 12px}
+.lede{font-size:19px;color:var(--ink2);max-width:560px;line-height:1.45}
+.ph{background:#ece7dc center/cover no-repeat}
 
-  /* editor */
-  .editor { padding:22px; }
-  .favs { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
-  .fav { display:flex; align-items:center; gap:10px; padding:6px 8px; border:1px solid var(--line); border-radius:10px; background:#fff; }
-  .fav .ph { width:30px; height:44px; border-radius:5px; background:var(--paper-2) center/cover no-repeat; flex:none; }
-  .fav .nm { flex:1; font-size:14.5px; line-height:1.25; }
-  .fav .nm small { display:block; color:var(--muted); font-size:12px; }
-  .fav button { border:0; background:none; font-size:18px; color:var(--muted); cursor:pointer; }
-  .searchbox { position:relative; }
-  .results { position:absolute; left:0; right:0; top:calc(100% + 4px); background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 14px 30px -18px rgba(0,0,0,.3); z-index:5; overflow:hidden; }
-  .results button { display:flex; width:100%; align-items:center; gap:10px; padding:8px 10px; border:0; background:#fff; cursor:pointer; text-align:left; font:14.5px Inter,sans-serif; }
-  .results button:hover, .results button.hl { background:var(--paper); }
-  .results .ph { width:28px; height:40px; border-radius:4px; background:var(--paper-2) center/cover no-repeat; flex:none; }
-  .results small { color:var(--muted); display:block; font-size:12px; }
+/* ===== landing ===== */
+.hero{display:grid;grid-template-columns:1.25fr .9fr;gap:40px;align-items:center;margin-top:42px}
+.hero .accent{display:inline-block;background:var(--butter);padding:0 .12em;border-radius:.12em;transform:rotate(-1.5deg)}
+.auth{padding:26px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:999px;padding:4px;margin-bottom:6px}
+.seg button{padding:10px;border:0;border-radius:999px;background:none;font:600 14px var(--display);cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px -4px rgba(0,0,0,.2)}
+.marquee{margin:56px -24px 0;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mrow{display:flex;gap:14px;width:max-content;animation:mq 60s linear infinite;padding:7px 0}
+.mrow.rev{animation-direction:reverse;animation-duration:70s}
+.mrow .ph{width:118px;aspect-ratio:2/3;border-radius:14px;flex:none;box-shadow:var(--shadow)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.steps3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:46px}
+.steps3 .panel{padding:24px;position:relative;overflow:hidden}
+.steps3 .num{font:800 64px/1 var(--display);letter-spacing:-.05em;color:var(--bg);-webkit-text-stroke:1.5px var(--line2);position:absolute;right:18px;top:12px}
+.steps3 h3{font-size:26px;letter-spacing:-.03em;margin:10px 0 6px;line-height:1.05}
+.steps3 p{margin:0;color:var(--ink2);font-size:15px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
 
-  /* radar */
-  .people { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .person { padding:18px; display:flex; flex-direction:column; gap:10px; position:relative; overflow:hidden; }
-  .person .top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
-  .score { font-family:"Instrument Serif",serif; font-size:44px; line-height:.9; }
-  .score small { font:600 11px Inter,sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; margin-top:4px; }
-  .person .arch { font-family:"Instrument Serif",serif; font-size:25px; line-height:1.05; }
-  .person .thumbs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
-  .person .thumbs .ph { aspect-ratio:2/3; border-radius:6px; background:var(--paper-2) center/cover no-repeat; }
-  .person .blind { font-size:13px; color:var(--muted); }
-  .person .acts { display:flex; gap:8px; margin-top:auto; flex-wrap:wrap; }
-  .person .acts button, .person .acts a { padding:9px 14px; font-size:14px; }
-  .bar { height:5px; border-radius:5px; background:var(--paper-2); overflow:hidden; }
-  .bar i { display:block; height:100%; background:linear-gradient(90deg,var(--a),var(--ab),var(--b)); }
-  .ribbon { position:absolute; top:12px; right:-34px; transform:rotate(35deg); background:var(--ab); color:#fff; font:600 10.5px Inter,sans-serif; letter-spacing:.08em; padding:4px 40px; text-transform:uppercase; }
+/* ===== studio ===== */
+.studio-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin:24px 0 18px}
+.stepper{display:flex;gap:6px;align-items:center}
+.stepper span{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font:500 13px var(--display);color:var(--muted);background:var(--surface);border:1px solid var(--line)}
+.stepper span b{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--bg);font:600 11px var(--mono)}
+.stepper span.on{color:var(--ink);border-color:var(--ink)}
+.stepper span.on b{background:var(--ink);color:#fff}
+.stepper span.done b{background:var(--mint);color:var(--ink)}
+.studio{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+.wall{padding:20px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid var(--line2);background:var(--surface);font:600 14.5px var(--display);cursor:pointer;color:var(--ink2);transition:all .2s}
+.tab .n{font:500 11px var(--mono);background:var(--bg);border-radius:999px;padding:2px 7px;color:var(--muted)}
+.tab.on{background:var(--c);border-color:var(--c);color:#fff}
+.tab.on .n{background:rgba(255,255,255,.25);color:#fff}
+.tab:not(.on):hover{border-color:var(--c);color:var(--ink)}
+.wall-tools{display:flex;gap:12px;align-items:center;margin:16px 0 6px;flex-wrap:wrap}
+.searchbox{position:relative;flex:1;min-width:240px}
+.searchbox .inp{padding-left:42px}
+.searchbox svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -24px rgba(0,0,0,.35);z-index:10;overflow:hidden;padding:6px}
+.results button{display:flex;width:100%;align-items:center;gap:12px;padding:8px 10px;border:0;background:none;border-radius:10px;cursor:pointer;text-align:left;font:15px var(--display)}
+.results button:hover,.results button.hl{background:var(--bg)}
+.results .ph{width:32px;height:46px;border-radius:6px;flex:none}
+.results small{display:block;color:var(--muted);font-size:12px}
+.wall-label{display:flex;align-items:center;gap:8px;margin:14px 0 12px;min-height:22px}
+.wall-label .live{width:8px;height:8px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 0 rgba(111,214,172,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(111,214,172,0)}100%{box-shadow:0 0 0 0 rgba(111,214,172,0)}}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.tile{position:relative;border:0;padding:0;background:none;cursor:pointer;text-align:left;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.tile .ph{aspect-ratio:2/3;border-radius:14px;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s;box-shadow:0 10px 24px -18px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.tile .ph.noimg{display:grid;place-items:center;padding:10px;text-align:center;font:700 14px/1.1 var(--display);color:var(--ink2);background:linear-gradient(160deg,#fff,#efe9dd)}
+.tile:hover .ph{transform:translateY(-5px) rotate(-1.2deg);box-shadow:0 22px 34px -20px rgba(0,0,0,.55)}
+.tile .nm{font-size:13.5px;font-weight:600;line-height:1.2;margin-top:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile .yr{font:11px var(--mono);color:var(--muted)}
+.tile .ck{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;opacity:0;transform:scale(.6);transition:all .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 4px 10px -4px rgba(0,0,0,.4);z-index:2}
+.tile:hover .ck{opacity:1;transform:scale(1)}
+.tile.sel .ph{outline:3px solid var(--c);outline-offset:3px}
+.tile.sel .ck{opacity:1;transform:scale(1);background:var(--c);color:#fff}
+.skel{aspect-ratio:2/3;border-radius:14px;background:linear-gradient(100deg,#ece7dc 30%,#f6f2ea 50%,#ece7dc 70%);background-size:300% 100%;animation:sh 1.3s linear infinite}
+@keyframes sh{to{background-position:-150% 0}}
+.shelf{position:sticky;top:16px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.shelf h3{margin:0;font-size:22px;letter-spacing:-.03em}
+.cover{display:flex;gap:6px}
+.cover i{flex:1;height:8px;border-radius:8px;background:var(--bg);transition:background .3s}
+.cover i.on{background:var(--c)}
+.stack{display:flex;flex-direction:column;gap:7px;max-height:340px;overflow:auto;margin:0 -4px;padding:0 4px}
+.sitem{display:flex;align-items:center;gap:10px;padding:6px;border-radius:12px;background:var(--bg);animation:pop .35s cubic-bezier(.2,.8,.2,1) both}
+.sitem .ph{width:34px;height:50px;border-radius:7px;flex:none}
+.sitem .t{flex:1;font-size:14px;font-weight:600;line-height:1.2}
+.sitem .t small{display:block;font:400 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.sitem button{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px}
+.sitem button:hover{background:#fff;color:var(--ink)}
+.empty-shelf{border:1.5px dashed var(--line2);border-radius:14px;padding:22px 16px;text-align:center;color:var(--muted);font-size:14px}
+details.more summary{cursor:pointer;font-size:14px;color:var(--ink2);list-style:none}
+details.more summary::before{content:"+ ";font-family:var(--mono)}
+details.more[open] summary::before{content:"– "}
+.fly{position:fixed;z-index:50;border-radius:12px;background-size:cover;background-position:center;pointer-events:none;transition:all .55s cubic-bezier(.5,0,.2,1);box-shadow:0 20px 40px -16px rgba(0,0,0,.5)}
 
-  /* match + duel */
-  .panel { padding:22px; }
-  .matchnum { font-family:"Instrument Serif",serif; font-size:84px; line-height:.9; }
-  .opener { font-family:"Instrument Serif",serif; font-size:26px; line-height:1.2; margin:8px 0 14px; }
-  .together { display:flex; gap:14px; align-items:center; margin-top:10px; }
-  .together .ph { width:64px; height:96px; border-radius:8px; background:var(--paper-2) center/cover no-repeat; flex:none; }
-  .q { font-family:"Instrument Serif",serif; font-size:clamp(30px,4vw,44px); line-height:1.05; margin:10px 0 22px; }
-  .opts { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-  .opts.two { grid-template-columns:repeat(2,1fr); max-width:620px; }
-  .opt { padding:0; overflow:hidden; cursor:pointer; text-align:left; font:inherit; color:inherit; transition:transform .15s, box-shadow .15s; display:flex; flex-direction:column; }
-  .opt:hover { transform:translateY(-3px); box-shadow:0 14px 30px -20px rgba(0,0,0,.4); }
-  .opt .ph { aspect-ratio:3/4; background:var(--paper-2) center/cover no-repeat; }
-  .opt .nm { padding:12px 14px; font-family:"Instrument Serif",serif; font-size:22px; line-height:1.1; }
-  .opt .nm small { display:block; font:12px Inter,sans-serif; color:var(--muted); margin-top:4px; text-transform:capitalize; }
-  .opt.right { outline:3px solid #2f8f6b; } .opt.wrong { outline:3px solid #a2301b; opacity:.8; }
-  .progress { display:flex; gap:6px; margin:12px 0 0; max-width:420px; } .progress i { flex:1; height:4px; border-radius:4px; background:var(--paper-2); } .progress i.on { background:var(--ink); }
-  .review { display:grid; gap:10px; margin-top:18px; }
-  .review .ln { display:flex; gap:12px; align-items:center; padding:10px 12px; }
-  .review .ph { width:36px; height:54px; border-radius:5px; background:var(--paper-2) center/cover no-repeat; flex:none; }
-  .list { display:grid; gap:10px; }
-  .list a { display:flex; justify-content:space-between; padding:14px 16px; text-decoration:none; }
-  footer { margin-top:70px; font-size:13px; color:var(--muted); border-top:1px solid var(--line); padding-top:18px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:var(--paper); padding:10px 16px; border-radius:999px; font-size:14px; z-index:20; animation:fade .25s ease; }
+/* reading */
+.reading{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;min-height:520px;margin-top:10px}
+.orbit{position:relative;height:440px}
+.orbit .ph{position:absolute;width:132px;aspect-ratio:2/3;border-radius:16px;box-shadow:0 26px 44px -22px rgba(0,0,0,.6);left:50%;top:50%;transition:transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.log{font-family:var(--mono);font-size:13px;color:var(--ink2);min-height:150px}
+.log div{padding:5px 0;border-bottom:1px dashed var(--line2);animation:rise .4s both;display:flex;gap:10px}
+.log div b{color:var(--cobalt);font-weight:500;min-width:58px}
+.tagrain{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;min-height:90px}
+.tagrain .chip{animation:pop .45s cubic-bezier(.2,.8,.2,1) both}
 
-  @media (max-width: 860px) {
-    .hero, .grid2, .feat { grid-template-columns:1fr; }
-    .people { grid-template-columns:1fr 1fr; }
-    .opts { grid-template-columns:1fr 1fr 1fr; gap:10px; }
-  }
-  @media (max-width: 560px) {
-    .people { grid-template-columns:1fr; }
-    .opts .nm { font-size:17px; padding:8px 10px; }
-    h1 { margin-top:34px; }
-    .tid .posters { grid-template-columns:repeat(4,1fr); }
-    .tid .posters figure:nth-child(n+5) { display:none; }
-  }
+/* taste id card */
+.idwrap{perspective:1400px}
+.idcard{position:relative;width:100%;max-width:440px;aspect-ratio:5/7;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,.8,.2,1);margin:0 auto}
+.idcard.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:28px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff;box-shadow:0 40px 70px -40px rgba(21,19,15,.55),0 0 0 1px rgba(21,19,15,.06);display:flex;flex-direction:column}
+.face.back{transform:rotateY(180deg)}
+.face .mesh{position:absolute;inset:0;background:radial-gradient(120% 80% at 0% 0%,var(--c1) 0%,transparent 55%),radial-gradient(90% 70% at 100% 10%,var(--c2) 0%,transparent 55%),radial-gradient(90% 70% at 60% 110%,var(--c3) 0%,transparent 60%),#fffaf1;opacity:.9}
+.face .sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);mix-blend-mode:soft-light;transform:translateX(var(--sx,0));pointer-events:none}
+.face .in{position:relative;padding:24px 24px 20px;display:flex;flex-direction:column;height:100%}
+.idtop{display:flex;justify-content:space-between;align-items:center}
+.idtop .mono{color:rgba(21,19,15,.6)}
+.holo{width:38px;height:28px;border-radius:7px;background:linear-gradient(135deg,#ffe8a3,#ffb3c7,#b7c4ff,#a8f0d4);box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.idname{margin-top:18px;font-size:15px;color:rgba(21,19,15,.7)}
+.idname b{color:var(--ink);font-size:17px}
+.idarch{font-weight:800;font-size:clamp(34px,3.6vw,46px);line-height:.92;letter-spacing:-.045em;margin:8px 0 10px}
+.idtag{font-family:var(--serif);font-style:italic;font-size:20px;line-height:1.2;color:var(--ink2);margin:0}
+.idfavs{display:flex;margin-top:auto;padding-top:16px;height:200px;align-items:flex-end;justify-content:center}
+.idfavs .ph{width:112px;aspect-ratio:2/3;border-radius:12px;box-shadow:0 14px 26px -14px rgba(0,0,0,.6);border:3px solid #fff;flex:none;transition:transform .4s}
+.idfavs .ph+.ph{margin-left:-40px}
+.idfavs .ph:nth-child(1){transform:rotate(-8deg) translateY(10px)}.idfavs .ph:nth-child(2){transform:rotate(-4deg) translateY(2px)}.idfavs .ph:nth-child(3){z-index:2;transform:translateY(-4px)}.idfavs .ph:nth-child(4){transform:rotate(4deg) translateY(2px)}.idfavs .ph:nth-child(5){transform:rotate(8deg) translateY(10px)}
+.idcard:hover .idfavs .ph{margin-left:-24px}.idcard:hover .idfavs .ph:first-child{margin-left:0}
+.idchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.idchips span{font-size:12.5px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.75);backdrop-filter:blur(6px);border:1px solid rgba(21,19,15,.08)}
+.idfoot{display:flex;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px dashed rgba(21,19,15,.18)}
+.idfoot .mono{font-size:10.5px;color:rgba(21,19,15,.55)}
+.back .in{gap:12px}
+.dna{display:grid;gap:9px;margin-top:6px}
+.dna .row{display:grid;grid-template-columns:82px 1fr;gap:10px;align-items:baseline}
+.dna .row .mono{font-size:10.5px}
+.dna .row div{font-size:13.5px;line-height:1.3}
+.nextp{display:flex;gap:8px;margin-top:auto}
+.nextp figure{margin:0;flex:1}
+.nextp .ph{aspect-ratio:2/3;border-radius:10px}
+.nextp figcaption{font-size:11px;line-height:1.15;margin-top:4px;color:var(--ink2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cardacts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.dnafull{display:grid;gap:12px;margin-top:14px}
+.drow{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line2)}
+.nextrow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:12px;max-width:560px}
+.nextrow figure{margin:0}.nextrow .ph{aspect-ratio:2/3;border-radius:12px;box-shadow:var(--shadow)}.nextrow figcaption{font-size:12.5px;font-weight:600;line-height:1.2;margin-top:6px}
+.reveal{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:10px}
+
+/* radar */
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pc{padding:20px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+.pc .top{display:flex;justify-content:space-between;align-items:flex-start}
+.ring{--p:50;width:76px;height:76px;border-radius:50%;background:conic-gradient(var(--tomato) calc(var(--p)*1%),var(--bg) 0);display:grid;place-items:center;flex:none}
+.ring b{width:60px;height:60px;border-radius:50%;background:#fff;display:grid;place-items:center;font:800 20px var(--display);letter-spacing:-.04em}
+.pc .arch{font-weight:800;font-size:26px;line-height:1;letter-spacing:-.035em}
+.pc .who{font-size:13.5px;color:var(--muted)}
+.pc .fans{display:flex;height:96px;align-items:flex-end}
+.pc .fans .ph{width:62px;aspect-ratio:2/3;border-radius:10px;border:2.5px solid #fff;box-shadow:0 10px 20px -12px rgba(0,0,0,.6);transition:transform .35s}
+.pc .fans .ph+.ph{margin-left:-14px}
+.pc:hover .fans .ph:nth-child(2){transform:translateY(-6px) rotate(4deg)}
+.pc:hover .fans .ph:nth-child(3){transform:translateY(-3px) rotate(-3deg)}
+.pc .blur{filter:blur(0)}
+.badge{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.badge.hot{background:var(--pink);color:var(--ink)}
+.pc .acts{margin-top:auto;display:flex;gap:8px}
+
+/* match/profile/duel */
+.duo{display:grid;grid-template-columns:.95fr 1.05fr;gap:34px;align-items:start;margin-top:26px}
+.bignum{font:800 clamp(80px,10vw,140px)/.85 var(--display);letter-spacing:-.06em}
+.bignum small{font-size:.35em;letter-spacing:-.02em;color:var(--muted)}
+.block{padding:24px}
+.block+.block{margin-top:14px}
+.quote{font-family:var(--serif);font-style:italic;font-size:28px;line-height:1.18;margin:8px 0 16px}
+.together{display:flex;gap:16px;align-items:center;margin-top:10px}
+.together .ph{width:72px;height:108px;border-radius:12px;flex:none;box-shadow:var(--shadow)}
+.q{font-weight:800;font-size:clamp(34px,4.6vw,60px);line-height:.95;letter-spacing:-.04em;margin:14px 0 26px;max-width:900px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;max-width:900px}
+.opts.two{grid-template-columns:repeat(2,1fr);max-width:620px}
+.opt{border:0;padding:0;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.opt .ph{aspect-ratio:3/4;border-radius:18px;box-shadow:0 18px 34px -22px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.opt:hover .ph{transform:translateY(-6px) rotate(-1deg)}
+.opt .nm{font-weight:700;font-size:20px;letter-spacing:-.02em;line-height:1.1;margin-top:10px}
+.opt .nm small{display:block;font:11px var(--mono);color:var(--muted);text-transform:uppercase;margin-top:4px;letter-spacing:.05em}
+.prog{display:flex;gap:6px;max-width:420px;margin-top:12px}.prog i{flex:1;height:5px;border-radius:5px;background:var(--line)}.prog i.on{background:var(--ink)}
+.review{display:grid;gap:10px;margin-top:22px;max-width:720px}
+.review .ln{display:flex;gap:14px;align-items:center;padding:10px 14px}
+.review .ph{width:40px;height:60px;border-radius:8px;flex:none}
+.list{display:grid;gap:10px}
+.list a{display:flex;justify-content:space-between;padding:16px 18px;text-decoration:none}
+footer{margin-top:80px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid var(--line);padding-top:18px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-size:14px;z-index:60;animation:rise .3s both}
+
+@media (max-width:1020px){.grid{grid-template-columns:repeat(4,1fr)}.studio{grid-template-columns:1fr}.shelf{position:sticky;top:auto;bottom:12px;z-index:20;padding:14px 16px;gap:8px;box-shadow:0 20px 50px -18px rgba(21,19,15,.45)}.shelf .stack,.shelf details{display:none}.shelf h3{font-size:18px}.people{grid-template-columns:1fr 1fr}}
+@media (max-width:860px){.hero,.reveal,.reading,.duo,.steps3{grid-template-columns:1fr}.orbit{height:300px}}
+@media (max-width:560px){.grid{grid-template-columns:repeat(3,1fr);gap:10px}.people{grid-template-columns:1fr}.opts{grid-template-columns:repeat(3,1fr);gap:10px}.opt .nm{font-size:15px}.links a,.links button{padding:7px 10px;font-size:13px}.wrap{padding:14px 16px 70px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <nav class="top">
-    <a class="brand" href="#/">
-      <svg width="34" height="22" viewBox="0 0 34 22"><circle cx="11" cy="11" r="10" fill="#e0613f" opacity=".85"/><circle cx="23" cy="11" r="10" fill="#2f6fb3" opacity=".85" style="mix-blend-mode:multiply"/></svg>
-      TasteBridge
-    </a>
+    <a class="brand" href="#/"><span class="logo"><i></i><i></i></span>TasteBridge</a>
     <div class="links" id="links"></div>
   </nav>
   <main id="view"></main>
   <footer>
-    <span>Built for the Qloo Agentic Hackathon by Q1f730. Every match, tag and recommendation comes from Qloo's taste graph; AI only names and explains.</span>
+    <span>Built for the Qloo Agentic Hackathon by Q1f730. Every match, tag and pick comes from Qloo's taste graph; AI only names and explains.</span>
     <span><a href="/quick">Quick two-person mode</a> · <a href="https://github.com/q1f0730/tastebridge" target="_blank" rel="noopener">MIT · GitHub</a></span>
   </footer>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js" defer></script>
 <script>
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const bg = (url) => (url ? `background-image:url('${esc(url)}')` : "");
-const dom = (d) => String(d || "").replace("_", " ").replace("tv show", "series");
+const img = (u) => (u && /^https:\/\/images\.qloo\.com\//.test(u) ? "/api/img?u=" + encodeURIComponent(u) : u || "");
+const bg = (u) => (u ? `background-image:url('${esc(img(u))}')` : "");
+const DOMAINS = [
+  { k: "movie", label: "Films", one: "film" },
+  { k: "tv_show", label: "Series", one: "series" },
+  { k: "artist", label: "Music", one: "artist" },
+  { k: "book", label: "Books", one: "book" },
+  { k: "podcast", label: "Podcasts", one: "podcast" },
+];
+const dname = (d) => (DOMAINS.find((x) => x.k === d) || { one: String(d || "").replace("_", " ") }).one;
+const dcol = (d) => `var(--${DOMAINS.some((x) => x.k === d) ? d : "movie"})`;
 const S = { me: null, card: null };
+const PALETTES = { "#e0613f": ["#ffb199", "#ffd25e", "#ff8fb8"], "#2f6fb3": ["#9fb4ff", "#a8f0d4", "#d7c9ff"], "#7a4f8f": ["#d7c9ff", "#ff8fb8", "#9fb4ff"], "#2f8f6b": ["#a8f0d4", "#ffe08a", "#9fb4ff"], "#c08a1e": ["#ffd25e", "#ffb199", "#a8f0d4"], "#b8456b": ["#ff8fb8", "#ffd25e", "#d7c9ff"], "#3d5a80": ["#9fb4ff", "#d7c9ff", "#a8f0d4"], "#8a5a44": ["#ffb199", "#d7c9ff", "#ffe08a"] };
+const pal = (c) => PALETTES[c] || PALETTES["#7a4f8f"];
 
 async function api(path, opts = {}) {
   const res = await fetch(path, { ...opts, headers: { "content-type": "application/json", ...(opts.headers || {}) }, body: opts.body ? JSON.stringify(opts.body) : undefined });
@@ -174,111 +279,203 @@ async function api(path, opts = {}) {
   if (!res.ok) throw Object.assign(new Error(data.error || `HTTP ${res.status}`), { status: res.status });
   return data;
 }
-function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2200); }
+function toast(t) { const d = document.createElement("div"); d.className = "toast"; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2300); }
 async function loadMe() { const r = await api("/api/me"); S.me = r.user; S.card = r.card || null; }
 const view = $("#view");
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function nav() {
   const r = location.hash.split("/")[1] || "";
   const L = (h, t, k) => `<a href="#/${h}" class="${r === k ? "on" : ""}">${t}</a>`;
   $("#links").innerHTML = S.me
-    ? L("radar", "Taste Radar", "radar") + L("duels", "Duels", "duels") + L("me", "My Taste ID", "me") + `<a class="me" href="#/u/${esc(S.me.handle)}">@${esc(S.me.handle)}</a><button id="out">Sign out</button>`
+    ? L("me", "My Taste ID", "me") + L("radar", "Radar", "radar") + L("duels", "Duels", "duels") + `<a class="me" href="#/u/${esc(S.me.handle)}">@${esc(S.me.handle)}</a><button id="out">Sign out</button>`
     : `<a href="/quick">Quick mode</a>` + L("", "Sign in", "x");
   const o = $("#out"); if (o) o.onclick = async () => { await api("/api/logout", { method: "POST" }); S.me = null; location.hash = "#/"; route(); };
 }
 
-// ---------- Taste ID card ----------
-function tasteCard(c, { handle, display } = {}) {
+// ---------- Taste ID card (front + back) ----------
+function idCard(c, { handle, display } = {}) {
+  const [c1, c2, c3] = pal(c.color);
   const favs = (c.favorites || []).slice(0, 5);
-  const empty = !c.archetype;
-  return `<div class="tid ${empty ? "empty" : ""}" style="--c:${esc(c.color || "#7a4f8f")}">
-    <div class="glow"></div>
-    <div class="row1"><span>Taste ID</span><span>${c.demo ? '<span class="demo-badge">Demo persona</span>' : "TasteBridge"}</span></div>
-    <div class="who"><b>${esc(display || c.display || "")}</b> ${handle || c.handle ? `· @${esc(handle || c.handle)}` : ""}${c.city ? ` · ${esc(c.city)}` : ""}</div>
-    <div class="arch">${esc(empty ? "Add 3+ favorites" : c.archetype)}</div>
-    <p class="tag">${esc(empty ? "Qloo reads them and names your taste." : c.tagline)}</p>
-    <div class="posters">${favs.map((f) => `<figure><div class="ph" style="${bg(f.image)}"></div><figcaption>${esc(f.name)}</figcaption></figure>`).join("")}</div>
-    <div class="pills">${(c.tags || []).slice(0, 7).map((t) => `<span class="pill">${esc(t.name)}</span>`).join("")}</div>
-    <div class="foot"><span>${c.bio ? esc(c.bio) : ""}</span><span>Taste graph by Qloo</span></div>
-  </div>`;
+  const dna = c.dna || {};
+  const rows = [["Style", dna.style], ["Genres", dna.genre], ["Archetypes", dna.archetype], ["Characters", dna.character], ["Music", dna.music]].filter((r) => r[1] && r[1].length);
+  const h = handle || c.handle || "";
+  return `<div class="idwrap"><div class="idcard" id="idcard" style="--c1:${c1};--c2:${c2};--c3:${c3}">
+    <div class="face front"><div class="mesh"></div><div class="sheen"></div><div class="in">
+      <div class="idtop"><span class="mono">Taste ID · No. ${String(c.uid || 0).padStart(4, "0")}</span>${c.demo ? '<span class="badge">Demo persona</span>' : '<span class="holo"></span>'}</div>
+      <div class="idname"><b>${esc(display || c.display || h)}</b>${h ? ` · @${esc(h)}` : ""}${c.city ? ` · ${esc(c.city)}` : ""}</div>
+      <div class="idarch">${esc(c.archetype || "Your taste, unread")}</div>
+      <p class="idtag">${esc(c.tagline || "Pick 3+ favorites and Qloo will read them.")}</p>
+      <div class="idchips">${(c.tags || []).slice(0, 6).map((t) => `<span>${esc(t.name)}</span>`).join("")}</div>
+      <div class="idfavs">${favs.map((f) => `<div class="ph" title="${esc(f.name)}" style="${bg(f.image)}"></div>`).join("")}</div>
+      <div class="idfoot"><span class="mono">tastebridge · ${esc(h ? "/u/" + h : "")}</span><span class="mono">Taste graph: Qloo</span></div>
+    </div></div>
+    <div class="face back"><div class="mesh" style="opacity:.55"></div><div class="in">
+      <div class="idtop"><span class="mono">Taste DNA · from Qloo</span><span class="holo"></span></div>
+      <div class="dna">${rows.map(([k, v]) => `<div class="row"><span class="mono">${k}</span><div>${v.map(esc).join(" · ")}</div></div>`).join("") || '<div class="muted">Save your card to see your DNA.</div>'}</div>
+      ${(c.next || []).length ? `<div class="mono" style="margin-top:auto">Qloo would pick for you next</div><div class="nextp" style="margin-top:6px">${c.next.slice(0, 5).map((n) => `<figure><div class="ph" style="${bg(n.image)}"></div><figcaption>${esc(n.name)}</figcaption></figure>`).join("")}</div>` : ""}
+      <div class="idfoot"><span class="mono">${esc(h ? "@" + h : "")}</span><span class="mono">Tap to flip</span></div>
+    </div></div>
+  </div></div>`;
+}
+function bindCard(root = document) {
+  const card = $("#idcard", root); if (!card) return;
+  const wrap = card.parentElement;
+  wrap.onmousemove = (e) => {
+    if (card.classList.contains("flipped")) return;
+    const r = wrap.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 10}deg)`;
+    $$(".sheen", card).forEach((s) => s.style.setProperty("--sx", `${x * 60}%`));
+  };
+  wrap.onmouseleave = () => { if (!card.classList.contains("flipped")) card.style.transform = ""; };
+  card.onclick = () => { card.style.transform = ""; card.classList.toggle("flipped"); };
+}
+async function exportCard() {
+  const card = $("#idcard"); if (!card || !window.htmlToImage) return toast("Export not ready yet, try again in a second");
+  const wasFlipped = card.classList.contains("flipped"); card.classList.remove("flipped"); card.style.transform = "";
+  await sleep(950);
+  try {
+    const url = await htmlToImage.toPng($(".front", card), { pixelRatio: 2, cacheBust: true, skipFonts: false });
+    const a = document.createElement("a"); a.href = url; a.download = `taste-id-${S.me ? S.me.handle : "card"}.png`; a.click();
+  } catch (e) { toast("Couldn't export: " + e.message); }
+  if (wasFlipped) card.classList.add("flipped");
 }
 
-// ---------- views ----------
+// ---------- landing ----------
 async function home() {
   if (S.me) { location.hash = S.card && S.card.complete ? "#/radar" : "#/me"; return; }
-  view.innerHTML = `<div class="hero fade">
-    <div>
-      <h1>Your taste<br/><em>is your ID.</em></h1>
-      <p class="lede">Pick the films, shows, music, books and podcasts you love. Qloo's taste graph turns them into a Taste ID, then finds people who think like you. Wave, match, duel, and plan a night together.</p>
-      <button class="ghost" id="demo">Try it as a demo user →</button>
+  view.innerHTML = `<div class="hero">
+    <div class="rise">
+      <div class="mono" style="margin-bottom:18px">A taste-graph social app · powered by Qloo</div>
+      <h1 class="big">Your taste<br/>is your <span class="accent">ID</span><span class="serif">.</span></h1>
+      <p class="lede" style="margin-top:22px">Pick the films, series, music, books and podcasts you love. Qloo reads them into a Taste ID, then finds the people whose taste graph sits next to yours.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px"><button class="btn hot" id="demo">Try it as a demo user →</button><a class="btn line" href="/quick">Just two people? Quick mode</a></div>
     </div>
-    <form class="auth card" id="auth" autocomplete="on">
-      <div class="tabs"><button type="button" data-t="up" class="on">Create account</button><button type="button" data-t="in">Sign in</button></div>
-      <label class="f">Username</label><input class="txt" name="handle" autocomplete="username" placeholder="lowercase, e.g. moviebuff_42" maxlength="20" required />
-      <label class="f">Password</label><input class="txt" name="password" type="password" autocomplete="new-password" placeholder="6+ characters" required />
-      <div style="margin-top:16px"><button class="go" type="submit" id="authgo">Create my Taste ID</button></div>
+    <form class="auth panel rise" id="auth" style="animation-delay:.1s" autocomplete="on">
+      <div class="seg"><button type="button" data-t="up" class="on">Create account</button><button type="button" data-t="in">Sign in</button></div>
+      <label class="f mono">Username</label><input class="inp" name="handle" autocomplete="username" placeholder="moviebuff_42" maxlength="20" required />
+      <label class="f mono">Password</label><input class="inp" name="password" type="password" autocomplete="new-password" placeholder="6+ characters" required />
+      <button class="btn" type="submit" id="authgo" style="width:100%;margin-top:18px">Create my Taste ID</button>
       <div class="err" id="err"></div>
     </form>
   </div>
-  <div class="feat">
-    <div class="card"><div class="kicker">01 · Taste ID</div><h3>A card that says who you are</h3><p>Qloo reads your favorites across domains, pulls the taste tags they share, and AI names your persona.</p></div>
-    <div class="card"><div class="kicker">02 · Taste Radar</div><h3>Blind matches by taste</h3><p>See people ranked by how close their taste graph is to yours. Names stay hidden until you both wave.</p></div>
-    <div class="card"><div class="kicker">03 · Duel & Bridge</div><h3>Play, then plan</h3><p>Test how well you know a friend's taste, or let the agent plan a night you'll both enjoy.</p></div>
+  <div class="marquee"><div class="mrow" id="m1"></div><div class="mrow rev" id="m2"></div></div>
+  <div class="steps3">
+    <div class="panel rise"><span class="num">01</span><span class="dot" style="background:var(--tomato)"></span><h3>Build a Taste ID</h3><p>Tap posters from a Qloo-powered wall. It learns as you pick and suggests what you'd also love.</p></div>
+    <div class="panel rise" style="animation-delay:.08s"><span class="num">02</span><span class="dot" style="background:var(--cobalt)"></span><h3>Meet taste twins, blind</h3><p>The radar ranks people by how close their Qloo taste graph is to yours. Names unlock when you both wave.</p></div>
+    <div class="panel rise" style="animation-delay:.16s"><span class="num">03</span><span class="dot" style="background:var(--mint)"></span><h3>Duel, then plan a night</h3><p>Prove you know a friend's taste, or let the agent plan a film, album, book and place for you both.</p></div>
   </div>`;
   let mode = "up";
-  $$(".tabs button").forEach((b) => (b.onclick = () => {
-    mode = b.dataset.t; $$(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
+  $$(".seg button").forEach((b) => (b.onclick = () => {
+    mode = b.dataset.t; $$(".seg button").forEach((x) => x.classList.toggle("on", x === b));
     $("#authgo").textContent = mode === "up" ? "Create my Taste ID" : "Sign in";
     $("#auth [name=password]").autocomplete = mode === "up" ? "new-password" : "current-password";
   }));
   $("#auth").onsubmit = async (e) => {
-    e.preventDefault(); const f = new FormData(e.target); $("#err").textContent = "";
-    $("#authgo").disabled = true;
+    e.preventDefault(); const f = new FormData(e.target); $("#err").textContent = ""; $("#authgo").disabled = true;
     try { await api(mode === "up" ? "/api/signup" : "/api/login", { method: "POST", body: { handle: f.get("handle"), password: f.get("password") } }); await loadMe(); route(); }
     catch (er) { $("#err").textContent = er.message; } finally { $("#authgo").disabled = false; }
   };
   $("#demo").onclick = async () => {
-    try { await api("/api/login", { method: "POST", body: { handle: "demo", password: "tastebridge" } }); await loadMe(); location.hash = "#/radar"; route(); }
+    try { await api("/api/login", { method: "POST", body: { handle: "demo", password: "tastebridge" } }); await loadMe(); location.hash = "#/me"; route(); }
     catch (er) { $("#err").textContent = er.message; }
   };
+  const [a, b] = await Promise.all([api("/api/discover?domain=movie").catch(() => ({ items: [] })), api("/api/discover?domain=tv_show").catch(() => ({ items: [] }))]);
+  const row = (items) => { const h = items.filter((x) => x.image).map((x) => `<div class="ph" title="${esc(x.name)}" style="${bg(x.image)}"></div>`).join(""); return h + h; };
+  if ($("#m1")) { $("#m1").innerHTML = row(a.items); $("#m2").innerHTML = row(b.items); }
 }
 
-async function editor() {
+// ---------- studio: build your Taste ID ----------
+async function studio() {
   if (!S.me) return (location.hash = "#/");
   const c = S.card || {};
-  const st = { favs: [...(c.favorites || [])] };
-  view.innerHTML = `<h2>Your <span class="grad">Taste ID</span></h2><p class="sub">Add 3 to 10 favorites from different worlds: a film, a series, an artist, a book, a podcast. The more varied, the sharper your card and your matches.</p>
-  <div class="grid2">
-    <div class="editor card">
-      <label class="f" style="margin-top:0">Display name</label><input class="txt" id="display" maxlength="30" value="${esc(c.display || S.me.handle)}" />
-      <label class="f">Favorites <span id="cnt"></span></label>
-      <div class="searchbox"><input class="txt" id="q" placeholder="Search Qloo: Interstellar, Frank Ocean, Dune…" autocomplete="off" /><div class="results" id="res" hidden></div></div>
-      <div class="favs" id="favs"></div>
-      <label class="f">City (optional, used for places to go together)</label><input class="txt" id="city" maxlength="60" value="${esc(c.city || "")}" placeholder="e.g. Shanghai, New York" />
-      <label class="f">One-line bio (optional)</label><input class="txt" id="bio" maxlength="160" value="${esc(c.bio || "")}" placeholder="Rewatcher of comfort films, hunter of B-sides" />
-      <div style="margin-top:18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="go" id="save">Save & read my taste</button><span class="muted" id="status"></span></div>
-      <div class="err" id="err"></div>
+  if (c.complete && !studio.editing) return showId();
+  const st = { favs: [...(c.favorites || [])], tab: "movie", wall: {} };
+  view.innerHTML = `<div class="studio-head">
+      <div><div class="mono">Taste ID studio</div><h2 class="ttl" style="margin:8px 0 0">Tap what you <span class="serif">love.</span></h2></div>
+      <div class="stepper"><span class="on"><b>1</b>Pick</span><span><b>2</b>Qloo reads</span><span><b>3</b>Your ID</span></div>
     </div>
-    <div><div id="preview">${tasteCard(c, { handle: S.me.handle })}</div>
-      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap" id="after">${c.complete ? afterSave() : ""}</div></div>
-  </div>`;
-  const renderFavs = () => {
-    $("#favs").innerHTML = st.favs.map((f, i) => `<div class="fav"><div class="ph" style="${bg(f.image)}"></div><div class="nm">${esc(f.name)}<small>${esc(dom(f.domain))}${f.year ? " · " + esc(f.year) : ""}</small></div><button aria-label="Remove" data-i="${i}">×</button></div>`).join("");
-    $$("#favs button").forEach((b) => (b.onclick = () => { st.favs.splice(+b.dataset.i, 1); renderFavs(); }));
-    $("#cnt").textContent = `(${st.favs.length}/10)`;
+    <div class="studio">
+      <section class="wall panel">
+        <div class="tabs" id="tabs"></div>
+        <div class="wall-tools">
+          <div class="searchbox"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="inp" id="q" placeholder="Search anything in Qloo: Interstellar, Frank Ocean, Dune…" autocomplete="off" /><div class="results" id="res" hidden></div></div>
+        </div>
+        <div class="wall-label" id="wlabel"></div>
+        <div class="grid" id="grid"></div>
+      </section>
+      <aside class="shelf panel">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Your shelf</h3><span class="mono" id="cnt"></span></div>
+        <div><div class="cover" id="cover"></div><div class="mono" style="margin-top:7px;font-size:10.5px" id="covtxt"></div></div>
+        <div class="stack" id="stack"></div>
+        <details class="more"${c.display && c.display !== S.me.handle ? "" : ""}><summary>Name, city & bio</summary>
+          <label class="f mono">Display name</label><input class="inp" id="display" maxlength="30" value="${esc(c.display || S.me.handle)}" />
+          <label class="f mono">City (for places together)</label><input class="inp" id="city" maxlength="60" value="${esc(c.city || "")}" placeholder="Shanghai" />
+          <label class="f mono">One-line bio</label><input class="inp" id="bio" maxlength="160" value="${esc(c.bio || "")}" placeholder="Rewatcher of comfort films" />
+        </details>
+        <button class="btn hot" id="read" style="width:100%">Read my taste →</button>
+        <div class="err" id="err" style="margin:0"></div>
+      </aside>
+    </div>`;
+  const has = (id) => st.favs.some((f) => f.id === id);
+  const renderTabs = () => {
+    $("#tabs").innerHTML = DOMAINS.map((d) => { const n = st.favs.filter((f) => f.domain === d.k).length; return `<button class="tab ${st.tab === d.k ? "on" : ""}" style="--c:${dcol(d.k)}" data-k="${d.k}">${d.label}${n ? `<span class="n">${n}</span>` : ""}</button>`; }).join("");
+    $$("#tabs .tab").forEach((b) => (b.onclick = () => { st.tab = b.dataset.k; renderTabs(); loadWall(); }));
   };
-  renderFavs();
+  const renderShelf = () => {
+    const n = st.favs.length, doms = new Set(st.favs.map((f) => f.domain));
+    $("#cnt").textContent = `${n}/10`;
+    $("#cover").innerHTML = DOMAINS.map((d) => `<i class="${doms.has(d.k) ? "on" : ""}" style="--c:${dcol(d.k)}"></i>`).join("");
+    $("#covtxt").textContent = n < 3 ? `Pick ${3 - n} more to unlock your ID` : doms.size < 3 ? `${doms.size} worlds covered · mix in another for a sharper ID` : `${doms.size} worlds covered · nice range`;
+    $("#stack").innerHTML = n ? st.favs.map((f, i) => `<div class="sitem"><div class="ph" style="${bg(f.image)}"></div><div class="t">${esc(f.name)}<small style="color:${dcol(f.domain)}">${esc(dname(f.domain))}${f.year ? " · " + esc(f.year) : ""}</small></div><button data-i="${i}" aria-label="Remove">×</button></div>`).join("") : `<div class="empty-shelf">Your picks land here.<br/>Tap posters on the wall.</div>`;
+    $$("#stack button").forEach((b) => (b.onclick = () => { const f = st.favs[+b.dataset.i]; st.favs.splice(+b.dataset.i, 1); renderAll(); markTile(f.id, false); }));
+    $("#read").disabled = n < 3;
+    renderTabs();
+  };
+  const renderAll = () => renderShelf();
+  const markTile = (id, on) => { const t = $(`.tile[data-id="${CSS.escape(id)}"]`); if (t) t.classList.toggle("sel", on); };
+  const flyFrom = (el) => {
+    const r = el.getBoundingClientRect(), target = $("#stack").getBoundingClientRect();
+    const f = document.createElement("div"); f.className = "fly"; f.style.cssText = `left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px;${el.getAttribute("style") || ""}`;
+    document.body.appendChild(f); requestAnimationFrame(() => { f.style.left = target.left + 8 + "px"; f.style.top = target.top + 8 + "px"; f.style.width = "34px"; f.style.height = "50px"; f.style.opacity = ".2"; });
+    setTimeout(() => f.remove(), 600);
+  };
+  const toggle = (item, el) => {
+    if (has(item.id)) { st.favs = st.favs.filter((f) => f.id !== item.id); markTile(item.id, false); renderAll(); return; }
+    if (st.favs.length >= 10) return toast("10 is the max. Remove one first.");
+    st.favs.push(item); markTile(item.id, true); if (el) flyFrom(el); renderAll();
+    clearTimeout(toggle.t); toggle.t = setTimeout(() => loadWall(true), 700);
+  };
+  let wallSeq = 0;
+  const loadWall = async (soft) => {
+    const my = ++wallSeq, d = st.tab;
+    const seeds = st.favs.map((f) => f.id).join(",");
+    if (!soft) { $("#grid").innerHTML = Array.from({ length: 12 }, () => `<div class="skel"></div>`).join(""); $("#wlabel").innerHTML = `<span class="spin"></span><span class="mono">Asking Qloo…</span>`; }
+    const r = await api(`/api/discover?domain=${d}&seeds=${seeds}&exclude=${seeds}`).catch(() => ({ items: [] }));
+    if (my !== wallSeq) return;
+    const keep = st.favs.filter((f) => f.domain === d && !r.items.some((x) => x.id === f.id));
+    const items = [...keep, ...r.items].slice(0, 18);
+    $("#wlabel").innerHTML = r.personal
+      ? `<span class="live"></span><span class="mono">Qloo predicts from your ${st.favs.length} pick${st.favs.length > 1 ? "s" : ""} · updates as you tap</span>`
+      : `<span class="live" style="background:var(--butter)"></span><span class="mono">Popular on Qloo · pick a few and this wall learns your taste</span>`;
+    $("#grid").innerHTML = items.map((x, i) => `<button class="tile ${has(x.id) ? "sel" : ""}" data-id="${esc(x.id)}" style="--c:${dcol(x.domain || d)};animation-delay:${i * 25}ms">
+      <div class="ph ${x.image ? "" : "noimg"}" style="${bg(x.image)}">${x.image ? "" : esc(x.name)}<span class="ck"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg></span></div>
+      <div class="nm">${esc(x.name)}</div><div class="yr">${esc(x.year || dname(x.domain || d))}</div></button>`).join("");
+    $$("#grid .tile").forEach((t, i) => (t.onclick = () => toggle({ ...items[i], domain: items[i].domain || d }, $(".ph", t))));
+  };
+  // search
   let timer, seq = 0, hits = [], hl = -1;
   const q = $("#q"), res = $("#res");
-  const choose = (h) => { if (st.favs.length >= 10) return toast("10 is the max"); if (!st.favs.some((f) => f.id === h.id)) st.favs.push(h); q.value = ""; res.hidden = true; renderFavs(); q.focus(); };
+  const choose = (h) => { q.value = ""; res.hidden = true; if (!has(h.id)) toggle(h, null); q.focus(); };
   const paint = () => {
-    res.innerHTML = hits.length ? hits.map((h, i) => `<button type="button" data-i="${i}" class="${i === hl ? "hl" : ""}"><div class="ph" style="${bg(h.image)}"></div><div>${esc(h.name)}<small>${esc(dom(h.domain))}${h.year ? " · " + esc(h.year) : ""}</small></div></button>`).join("") : `<div style="padding:10px 12px" class="muted">No match in Qloo yet</div>`;
+    res.innerHTML = hits.length ? hits.map((h, i) => `<button type="button" data-i="${i}" class="${i === hl ? "hl" : ""}"><div class="ph" style="${bg(h.image)}"></div><div>${esc(h.name)}<small>${esc(dname(h.domain))}${h.year ? " · " + esc(h.year) : ""}${has(h.id) ? " · on your shelf" : ""}</small></div></button>`).join("") : `<div style="padding:10px 12px" class="muted">No match in Qloo</div>`;
     res.hidden = false; $$("#res button").forEach((b) => (b.onmousedown = (e) => { e.preventDefault(); choose(hits[+b.dataset.i]); }));
   };
   q.oninput = () => {
     clearTimeout(timer); const v = q.value.trim(); if (v.length < 2) { res.hidden = true; return; }
     timer = setTimeout(async () => { const my = ++seq; res.innerHTML = `<div style="padding:10px 12px" class="muted"><span class="spin"></span> Searching Qloo…</div>`; res.hidden = false;
-      const r = await api("/api/search?q=" + encodeURIComponent(v)).catch(() => ({ results: [] })); if (my !== seq) return; hits = r.results; hl = 0; paint(); }, 280);
+      const r = await api("/api/search?q=" + encodeURIComponent(v)).catch(() => ({ results: [] })); if (my !== seq) return; hits = r.results; hl = 0; paint(); }, 260);
   };
   q.onkeydown = (e) => {
     if (res.hidden || !hits.length) return;
@@ -288,143 +485,194 @@ async function editor() {
     else if (e.key === "Escape") res.hidden = true;
   };
   q.onblur = () => setTimeout(() => (res.hidden = true), 150);
-  $("#save").onclick = async () => {
-    if (st.favs.length < 3) { $("#err").textContent = "Add at least 3 favorites so Qloo has something to read."; return; }
-    $("#err").textContent = ""; $("#save").disabled = true; $("#status").innerHTML = `<span class="spin"></span> Qloo is reading your taste graph…`;
-    try {
-      const r = await api("/api/profile", { method: "POST", body: { display: $("#display").value, city: $("#city").value, bio: $("#bio").value, favorites: st.favs } });
-      S.card = r.card; $("#preview").innerHTML = tasteCard(r.card, { handle: S.me.handle }); $("#after").innerHTML = afterSave(); bindAfter();
-      $("#status").textContent = "Saved.";
-    } catch (er) { $("#err").textContent = er.message; $("#status").textContent = ""; }
-    finally { $("#save").disabled = false; }
-  };
-  bindAfter();
+  $("#read").onclick = () => readTaste(st.favs);
+  renderAll(); loadWall();
 }
-function afterSave() { return `<a class="go" href="#/radar">Find my taste twins →</a><button class="ghost" id="share">Copy my card link</button>`; }
-function bindAfter() { const s = $("#share"); if (s) s.onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${S.me.handle}`); toast("Link copied"); }; }
 
+// ---------- step 2: Qloo reads your taste ----------
+async function readTaste(favs) {
+  const details = { display: ($("#display") || {}).value || S.me.handle, city: ($("#city") || {}).value || "", bio: ($("#bio") || {}).value || "" };
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  view.innerHTML = `<div class="studio-head"><div><div class="mono">Taste ID studio</div><h2 class="ttl" style="margin:8px 0 0">Qloo is <span class="serif">reading</span> you.</h2></div>
+    <div class="stepper"><span class="done"><b>✓</b>Pick</span><span class="on"><b>2</b>Qloo reads</span><span><b>3</b>Your ID</span></div></div>
+    <div class="reading panel" style="padding:30px">
+      <div class="orbit" id="orbit">${favs.map((f) => `<div class="ph" style="${bg(f.image)}"></div>`).join("")}</div>
+      <div><div class="log" id="log"></div><div class="tagrain" id="rain"></div></div>
+    </div>`;
+  const cards = $$("#orbit .ph"); let t = 0;
+  const spin = setInterval(() => { t += 1; cards.forEach((c, i) => { const a = (i / cards.length) * Math.PI * 2 + t * 0.35; const rx = Math.min(170, $("#orbit").clientWidth / 2 - 70); c.style.transform = `translate(-50%,-50%) translate(${Math.cos(a) * rx}px, ${Math.sin(a) * 120}px) rotate(${Math.sin(a + i) * 10}deg) scale(${0.85 + 0.2 * (Math.sin(a) + 1) / 2})`; c.style.zIndex = Math.round(100 + Math.sin(a) * 50); }); }, 380);
+  cards.forEach((c, i) => (c.style.transform = `translate(-50%,-50%) rotate(${(i - cards.length / 2) * 6}deg)`));
+  const log = (k, v) => { const d = document.createElement("div"); d.innerHTML = `<b>${esc(k)}</b><span>${esc(v)}</span>`; $("#log").appendChild(d); };
+  const steps = [
+    ["search", `${favs.length} favorites resolved to Qloo entities`],
+    ["tags", "/v2/insights · filter.type=urn:tag · style, genre, archetype"],
+    ["music", "/v2/insights · music genres behind your picks"],
+    ["next", "/v2/insights · films + artists Qloo would pick for you"],
+    ["persona", "naming your taste from the tags"],
+  ];
+  const req = api("/api/profile", { method: "POST", body: { ...details, favorites: favs } });
+  for (const [k, v] of steps) { if (!$("#log")) return; log(k, v); await sleep(900); }
+  let r;
+  try { r = await req; } catch (e) { clearInterval(spin); log("error", e.message); $("#log").insertAdjacentHTML("beforeend", `<div style="border:0;margin-top:14px"><button class="btn" onclick="studio.editing=true;route()">Back to my picks</button></div>`); return; }
+  S.card = r.card;
+  log("done", `${(r.card.tags || []).length} defining tags found`);
+  const all = [...(r.card.dna?.style || []), ...(r.card.dna?.genre || []), ...(r.card.dna?.archetype || []), ...(r.card.dna?.music || []), ...(r.card.dna?.character || [])];
+  for (const [i, name] of all.slice(0, 14).entries()) { $("#rain").insertAdjacentHTML("beforeend", `<span class="chip" style="animation-delay:${i * 60}ms">${esc(name)}</span>`); }
+  await sleep(1500 + all.length * 40);
+  clearInterval(spin);
+  studio.editing = false;
+  showId(true);
+}
+
+// ---------- step 3: your Taste ID ----------
+function showId(fresh) {
+  const c = S.card;
+  view.innerHTML = `<div class="studio-head"><div><div class="mono">${fresh ? "Taste ID studio" : "My Taste ID"}</div><h2 class="ttl" style="margin:8px 0 0">${fresh ? 'Meet your <span class="serif">taste.</span>' : 'Your <span class="serif">Taste ID.</span>'}</h2></div>
+    ${fresh ? `<div class="stepper"><span class="done"><b>✓</b>Pick</span><span class="done"><b>✓</b>Qloo reads</span><span class="on"><b>3</b>Your ID</span></div>` : ""}</div>
+    <div class="reveal">
+      <div class="rise">${idCard(c, { handle: S.me.handle })}<div class="cardacts"><button class="btn line sm" id="flip">Flip card</button><button class="btn line sm" id="png">Download PNG</button><button class="btn line sm" id="share">Copy link</button></div></div>
+      <div class="rise" style="animation-delay:.15s">
+        <div class="mono">What Qloo read in your picks</div>
+        <div class="dnafull">${[["Style", c.dna?.style, "--tomato"], ["Genres", c.dna?.genre, "--cobalt"], ["Archetypes", c.dna?.archetype, "--artist"], ["Characters", c.dna?.character, "--book"], ["Music", c.dna?.music, "--podcast"]].filter((r) => r[1] && r[1].length).map(([k, v, col], i) => `<div class="drow rise" style="animation-delay:${0.2 + i * 0.08}s"><span class="mono" style="color:var(${col})">${k}</span><div class="chips">${v.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div></div>`).join("")}</div>
+        ${(c.next || []).length ? `<div class="mono" style="margin-top:26px">Qloo would pick for you next</div><div class="nextrow">${c.next.map((n) => `<figure><div class="ph" style="${bg(n.image)}"></div><figcaption>${esc(n.name)}</figcaption></figure>`).join("")}</div>` : ""}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px"><a class="btn hot" href="#/radar">Find my taste twins →</a><button class="btn line" id="edit">Edit picks</button></div>
+      </div>
+    </div>`;
+  bindCard();
+  $("#flip").onclick = () => $("#idcard").click();
+  $("#png").onclick = exportCard;
+  $("#share").onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${S.me.handle}`); toast("Card link copied"); };
+  $("#edit").onclick = () => { studio.editing = true; route(); };
+}
+
+// ---------- public card ----------
 async function profile(handle) {
-  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Loading card…</p>`;
-  let r; try { r = await api("/api/card/" + encodeURIComponent(handle)); } catch (e) { view.innerHTML = `<h2>Not found</h2><p class="sub">${esc(e.message)}</p>`; return; }
-  const c = r.card, mine = S.me && S.me.handle === c.handle;
-  const m = r.match;
-  view.innerHTML = `<div class="grid2 fade" style="margin-top:34px">
-    <div>${tasteCard(c)}</div>
-    <div class="panel card">
-      ${mine ? `<div class="kicker">This is you</div><h2 style="margin-top:8px">Share your card</h2><p class="sub">Send this link to a friend. When they sign in, they'll see how close your tastes are and can duel you or plan a night with you.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="go" id="share">Copy link</button><a class="ghost" href="#/me">Edit card</a></div>`
-      : !S.me ? `<div class="kicker">How close are your tastes?</div><h2 style="margin-top:8px">Make your own Taste ID to compare</h2><p class="sub">Sign up in 20 seconds and see your match with ${esc(c.display)}.</p><a class="go" href="#/">Create my Taste ID</a>`
-      : !m ? `<div class="kicker">Almost there</div><h2 style="margin-top:8px">Finish your card to compare</h2><a class="go" href="#/me">Add favorites</a>`
-      : `<div class="kicker">You × ${esc(c.display)}</div><div class="matchnum">${m.score}%</div><div class="bar" style="margin:8px 0 14px"><i style="width:${m.score}%"></i></div>
-        ${m.both_love && m.both_love.length ? `<p class="sub" style="margin-bottom:10px">You both put <b>${m.both_love.map(esc).join(", ")}</b> on your cards.</p>` : ""}<p class="sub" style="margin-bottom:10px">Taste match from Qloo's taste graph. You share:</p><div class="pills" style="margin-bottom:20px">${m.shared.map((t) => `<span class="pill">${esc(t.name)}</span>`).join("") || '<span class="muted">a thin thread, which makes it interesting</span>'}</div>
-        ${m.picks && m.picks.length ? `<p class="sub" style="margin-bottom:8px">Qloo would recommend both of you:</p><div class="pills" style="margin-bottom:20px">${m.picks.map((x) => `<span class="pill">${esc(x.name)}</span>`).join("")}</div>` : ""}
-        <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="go" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="ghost" id="duel">Duel: how well do I know them?</button></div><div class="err" id="err"></div>`}
+  view.innerHTML = `<p class="muted" style="margin-top:50px"><span class="spin"></span> Loading card…</p>`;
+  let r; try { r = await api("/api/card/" + encodeURIComponent(handle)); } catch (e) { view.innerHTML = `<h2 class="ttl">Not found.</h2><p class="lede">${esc(e.message)}</p>`; return; }
+  const c = r.card, mine = S.me && S.me.handle === c.handle, m = r.match;
+  view.innerHTML = `<div class="duo">
+    <div class="rise">${idCard(c)}<div class="cardacts"><button class="btn line sm" id="flip">Flip card</button></div></div>
+    <div class="rise" style="animation-delay:.12s">
+      ${mine ? `<div class="block panel"><div class="mono">This is you</div><h2 class="ttl" style="font-size:44px;margin:10px 0">Share your card.</h2><p class="lede" style="font-size:16px">Friends who open it see how close your tastes are, and can duel you or plan a night with you.</p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="btn" id="share">Copy link</button><a class="btn line" href="#/me">My Taste ID</a></div></div>`
+      : !S.me ? `<div class="block panel"><div class="mono">How close are your tastes?</div><h2 class="ttl" style="font-size:44px;margin:10px 0">Make yours to compare.</h2><p class="lede" style="font-size:16px">Takes 30 seconds of tapping posters.</p><a class="btn hot" href="#/">Create my Taste ID</a></div>`
+      : !m ? `<div class="block panel"><div class="mono">Almost there</div><h2 class="ttl" style="font-size:44px;margin:10px 0">Finish your card first.</h2><a class="btn hot" href="#/me">Pick favorites</a></div>`
+      : `<div class="block panel"><div class="mono">You × ${esc(c.display)}</div><div class="bignum" style="margin:10px 0 6px"><span data-count="${m.score}">0</span><small>% match</small></div>
+          ${m.both_love && m.both_love.length ? `<p style="font-size:17px;margin:8px 0">You both put <b>${m.both_love.map(esc).join(", ")}</b> on your cards.</p>` : ""}
+          <div class="mono" style="margin:16px 0 8px">Shared taste tags</div><div class="chips">${m.shared.map((t) => `<span class="chip">${esc(t.name)}</span>`).join("") || '<span class="muted">A thin thread, which makes it interesting.</span>'}</div>
+          ${m.picks && m.picks.length ? `<div class="mono" style="margin:18px 0 8px">Qloo would pick for both of you</div><div class="nextp" style="max-width:340px">${m.picks.map((x) => `<figure><div class="ph" style="${bg(x.image)}"></div><figcaption>${esc(x.name)}</figcaption></figure>`).join("")}</div>` : ""}
+        </div>
+        <div class="block panel" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn hot" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="btn line" id="duel">Duel: how well do I know them?</button><div class="err" id="err" style="width:100%;margin:0"></div></div>`}
     </div></div>`;
+  bindCard(); countUp();
+  $("#flip").onclick = () => $("#idcard").click();
   const s = $("#share"); if (s) s.onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${c.handle}`); toast("Link copied"); };
   const d = $("#duel"); if (d) d.onclick = () => startDuel(c.handle, d);
 }
-
+function countUp() {
+  $$("[data-count]").forEach((el) => { const to = +el.dataset.count; const t0 = performance.now(); const f = (t) => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
+}
 async function startDuel(handle, btn) {
   btn.disabled = true; const t = btn.textContent; btn.innerHTML = `<span class="spin"></span> Building rounds from Qloo…`;
   try { const r = await api("/api/duel", { method: "POST", body: { handle } }); location.hash = "#/duel/" + r.id; }
   catch (e) { const er = $("#err"); if (er) er.textContent = e.message; else toast(e.message); btn.disabled = false; btn.textContent = t; }
 }
 
+// ---------- radar ----------
 async function radar() {
   if (!S.me) return (location.hash = "#/");
-  view.innerHTML = `<h2>Taste <span class="grad">Radar</span></h2><p class="sub">People ranked by how close their Qloo taste graph is to yours. Cards stay anonymous: you see their persona and a few favorites. Wave, and if they wave back, you're revealed to each other.</p><div id="ppl"><p class="muted"><span class="spin"></span> Comparing taste graphs…</p></div>`;
+  view.innerHTML = `<div class="studio-head"><div><div class="mono">Taste Radar</div><h2 class="ttl" style="margin:8px 0 0">Your taste <span class="serif">twins.</span></h2></div>
+    <p class="muted" style="max-width:420px;margin:0">Ranked by how close each person's Qloo taste graph is to yours. Identities stay hidden until you both wave.</p></div>
+    <div id="ppl"><div class="people">${Array.from({ length: 6 }, () => `<div class="panel" style="height:300px"><div class="skel" style="aspect-ratio:auto;height:100%;border-radius:var(--r)"></div></div>`).join("")}</div></div>`;
   let r; try { r = await api("/api/radar"); } catch (e) { $("#ppl").innerHTML = `<p class="err">${esc(e.message)}</p>`; return; }
-  if (r.needsCard) { $("#ppl").innerHTML = `<div class="panel card"><h3 style="margin:0 0 6px">Your card needs 3+ favorites first</h3><a class="go" href="#/me">Make my Taste ID</a></div>`; return; }
+  if (r.needsCard) { $("#ppl").innerHTML = `<div class="block panel"><h3 style="margin:0 0 10px;font-size:26px">Your Taste ID needs 3+ favorites first.</h3><a class="btn hot" href="#/me">Build my Taste ID</a></div>`; return; }
   $("#ppl").innerHTML = `<div class="people">${r.people.map(personCard).join("")}</div>`;
   $$("[data-wave]").forEach((b) => (b.onclick = async () => {
     b.disabled = true; b.innerHTML = `<span class="spin"></span>`;
-    try { const w = await api("/api/wave/" + b.dataset.wave, { method: "POST" }); if (w.mutual) { toast("It's a match! Revealing…"); location.hash = "#/match/" + b.dataset.wave; } else { b.textContent = "Waved"; } }
+    try { const w = await api("/api/wave/" + b.dataset.wave, { method: "POST" }); if (w.mutual) { toast("They waved back. It's a match!"); setTimeout(() => (location.hash = "#/match/" + b.dataset.wave), 600); } else b.textContent = "Waved"; }
     catch (e) { toast(e.message); b.disabled = false; b.textContent = "Wave"; }
   }));
 }
-function personCard(p) {
-  const t = (p.favorites || []).slice(0, 4);
-  return `<div class="person card fade" style="--c:${esc(p.color)}">
-    ${p.wavedYou ? '<div class="ribbon">Waved at you</div>' : ""}
-    <div class="top"><div class="score">${p.match}%<small>taste match</small></div>${p.demo ? '<span class="demo-badge">Demo</span>' : ""}</div>
-    <div class="bar"><i style="width:${p.match}%"></i></div>
+function personCard(p, i) {
+  return `<div class="pc panel" style="animation-delay:${Math.min(i, 12) * 40}ms">
+    <div class="top"><div class="ring" style="--p:${p.match}"><b>${p.match}%</b></div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">${p.wavedYou ? '<span class="badge hot">Waved at you</span>' : ""}${p.demo ? '<span class="badge">Demo</span>' : ""}</div></div>
     <div class="arch">${esc(p.archetype)}</div>
-    <div class="blind">${p.mutual ? `<b style="color:var(--ink)">${esc(p.display)}</b> · @${esc(p.handle)}` : "Identity hidden until you both wave"}${p.city ? " · " + esc(p.city) : ""}</div>
-    <div class="thumbs">${t.map((f) => `<div class="ph" title="${esc(f.name)}" style="${bg(f.image)}"></div>`).join("")}</div>
-    <div class="pills">${(p.shared || []).slice(0, 3).map((s) => `<span class="pill">${esc(s.name)}</span>`).join("")}</div>
-    <div class="acts">${p.mutual ? `<a class="go" href="#/match/${p.uid}">Open match</a>` : p.waved ? `<button class="ghost" disabled>Waved</button>` : `<button class="go" data-wave="${p.uid}">${p.wavedYou ? "Wave back" : "Wave"}</button>`}</div>
+    <div class="who">${p.mutual ? `<b style="color:var(--ink)">${esc(p.display)}</b> · @${esc(p.handle)}` : "Identity hidden"}${p.city ? " · " + esc(p.city) : ""}</div>
+    <div class="fans">${(p.favorites || []).slice(0, 4).map((f) => `<div class="ph" title="${esc(f.name)}" style="${bg(f.image)}"></div>`).join("")}</div>
+    <div class="chips">${(p.shared || []).slice(0, 3).map((s) => `<span class="chip" style="font-size:12.5px;padding:4px 10px">${esc(s.name)}</span>`).join("")}</div>
+    <div class="acts">${p.mutual ? `<a class="btn sm" href="#/match/${p.uid}">Open match</a>` : p.waved ? `<button class="btn line sm" disabled>Waved</button>` : `<button class="btn sm ${p.wavedYou ? "hot" : ""}" data-wave="${p.uid}">${p.wavedYou ? "Wave back" : "Wave"}</button>`}</div>
   </div>`;
 }
 
+// ---------- match ----------
 async function match(uid) {
   if (!S.me) return (location.hash = "#/");
-  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Qloo is comparing your taste graphs and finding something for you both…</p>`;
-  let r; try { r = await api("/api/match/" + uid); } catch (e) { view.innerHTML = `<h2>Not yet</h2><p class="sub">${esc(e.message)}</p><a class="ghost" href="#/radar">Back to radar</a>`; return; }
+  view.innerHTML = `<p class="muted" style="margin-top:50px"><span class="spin"></span> Comparing your taste graphs in Qloo…</p>`;
+  let r; try { r = await api("/api/match/" + uid); } catch (e) { view.innerHTML = `<h2 class="ttl">Not yet.</h2><p class="lede">${esc(e.message)}</p><a class="btn line" href="#/radar">Back to radar</a>`; return; }
   const c = r.card, tg = r.together;
-  view.innerHTML = `<div class="kicker" style="margin-top:34px">It's a match</div><h2 style="margin-top:6px">You × <span class="grad">${esc(c.display)}</span> · ${r.match.score}%</h2>
-  <div class="grid2 fade" style="margin-top:20px">
-    <div>${tasteCard(c)}</div>
-    <div class="panel card">
-      <div class="kicker">Why you click</div><p style="font-size:17px;margin:8px 0 12px">${esc(r.why)}</p>
-      <div class="pills" style="margin-bottom:18px">${(r.shared.length ? r.shared : r.match.shared).slice(0, 6).map((t) => `<span class="pill">${esc(t.name)}</span>`).join("")}</div>
-      ${tg ? `<div class="kicker">Qloo says you'd both enjoy</div><div class="together"><div class="ph" style="${bg(tg.image)}"></div><div><b>${esc(tg.name)}</b>${tg.year ? ` <span class="muted">(${esc(tg.year)})</span>` : ""}<div class="muted" style="font-size:14px">${esc((tg.description || "").slice(0, 140))}</div></div></div>` : ""}
-      <div class="kicker" style="margin-top:20px">Your first message, drafted from your tastes</div><div class="opener">“${esc(r.opener)}”</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" id="copy">Copy message</button><a class="go" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="ghost" id="duel">Duel them</button></div>
-      <div class="err" id="err"></div>
+  view.innerHTML = `<div class="mono" style="margin-top:26px">It's a match</div><h2 class="ttl" style="margin-top:8px">You × ${esc(c.display)} <span class="serif">· ${r.match.score}%</span></h2>
+  <div class="duo">
+    <div class="rise">${idCard(c)}</div>
+    <div class="rise" style="animation-delay:.12s">
+      <div class="block panel"><div class="mono">Why you click</div><p style="font-size:19px;line-height:1.4;margin:10px 0 14px">${esc(r.why)}</p>
+        <div class="chips">${(r.shared.length ? r.shared : r.match.shared).slice(0, 6).map((t) => `<span class="chip">${esc(t.name)}</span>`).join("")}</div></div>
+      ${tg ? `<div class="block panel"><div class="mono">Qloo says you'd both enjoy</div><div class="together"><div class="ph" style="${bg(tg.image)}"></div><div><b style="font-size:20px">${esc(tg.name)}</b>${tg.year ? ` <span class="muted">${esc(tg.year)}</span>` : ""}<div class="muted" style="font-size:14px;margin-top:4px">${esc((tg.description || "").slice(0, 150))}</div></div></div></div>` : ""}
+      <div class="block panel"><div class="mono">First message, drafted from both tastes</div><div class="quote">“${esc(r.opener)}”</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn line sm" id="copy">Copy message</button><a class="btn hot sm" href="/bridge?a=${esc(S.me.handle)}&b=${esc(c.handle)}">Plan a night together</a><button class="btn line sm" id="duel">Duel them</button></div><div class="err" id="err"></div></div>
     </div></div>`;
+  bindCard();
   $("#copy").onclick = () => { navigator.clipboard.writeText(r.opener); toast("Copied"); };
   $("#duel").onclick = () => startDuel(c.handle, $("#duel"));
 }
 
+// ---------- duel ----------
 async function duel(id) {
-  view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Loading duel…</p>`;
-  let d; try { d = await api("/api/duel/" + id); } catch (e) { view.innerHTML = `<h2>Duel not found</h2>`; return; }
+  view.innerHTML = `<p class="muted" style="margin-top:50px"><span class="spin"></span> Loading duel…</p>`;
+  let d; try { d = await api("/api/duel/" + id); } catch (e) { view.innerHTML = `<h2 class="ttl">Duel not found.</h2>`; return; }
   if (d.finished) return duelResult(d);
-  if (!d.mine) { view.innerHTML = `<h2>@${esc(d.creator)} is testing how well they know @${esc(d.target)}</h2><p class="sub">Results appear here once they finish.</p>`; return; }
+  if (!d.mine) { view.innerHTML = `<h2 class="ttl">@${esc(d.creator)} is testing how well they know @${esc(d.target)}.</h2><p class="lede">Results appear here once they finish.</p>`; return; }
   const answers = [];
   const step = (i) => {
     if (i >= d.rounds.length) return submit();
     const r = d.rounds[i];
-    const q = r.kind === "pick" ? `Which of these is actually on <span class="grad">${esc(d.target_display)}</span>'s card?` : `Qloo thinks ${esc(d.target_display)} would enjoy one of these far more. Which?`;
-    view.innerHTML = `<div class="fade" style="margin-top:34px"><div class="kicker">Taste Duel · round ${i + 1} of ${d.rounds.length}</div><div class="progress">${d.rounds.map((_, k) => `<i class="${k <= i ? "on" : ""}"></i>`).join("")}</div>
+    const q = r.kind === "pick" ? `Which one is really on ${esc(d.target_display)}'s <span class="serif">card?</span>` : `Qloo thinks ${esc(d.target_display)} would enjoy one of these <span class="serif">far more.</span>`;
+    view.innerHTML = `<div style="margin-top:28px" class="rise"><div class="mono">Taste Duel · round ${i + 1} of ${d.rounds.length}</div><div class="prog">${d.rounds.map((_, k) => `<i class="${k <= i ? "on" : ""}"></i>`).join("")}</div>
       <div class="q">${q}</div>
-      <div class="opts ${r.options.length === 2 ? "two" : ""}">${r.options.map((o) => `<button class="opt card" data-id="${esc(o.id)}"><div class="ph" style="${bg(o.image)}"></div><div class="nm">${esc(o.name)}<small>${esc(dom(o.domain))}${o.year ? " · " + esc(o.year) : ""}</small></div></button>`).join("")}</div></div>`;
+      <div class="opts ${r.options.length === 2 ? "two" : ""}">${r.options.map((o, k) => `<button class="opt rise" style="animation-delay:${k * 70}ms" data-id="${esc(o.id)}"><div class="ph" style="${bg(o.image)}"></div><div class="nm">${esc(o.name)}<small>${esc(dname(o.domain))}${o.year ? " · " + esc(o.year) : ""}</small></div></button>`).join("")}</div></div>`;
     $$(".opt").forEach((b) => (b.onclick = () => { answers.push(b.dataset.id); step(i + 1); }));
   };
   const submit = async () => {
-    view.innerHTML = `<p class="muted" style="margin-top:40px"><span class="spin"></span> Scoring…</p>`;
+    view.innerHTML = `<p class="muted" style="margin-top:50px"><span class="spin"></span> Scoring against Qloo…</p>`;
     try { duelResult(await api(`/api/duel/${id}/answer`, { method: "POST", body: { answers } })); } catch (e) { view.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
   };
   step(0);
 }
 function duelResult(d) {
   const n = d.rounds.length, s = d.score;
-  const verdict = s === n ? "Basically telepathic." : s >= n - 1 ? "You really get their taste." : s >= n / 2 ? "Solid, with a few surprises." : "Their taste still has secrets. Ask them about it.";
-  view.innerHTML = `<div class="fade" style="margin-top:34px"><div class="kicker">Taste Duel · @${esc(d.creator)} on @${esc(d.target)}</div>
-    <div class="matchnum">${s}/${n}</div><h2 style="margin-top:4px">${verdict}</h2>
+  const verdict = s === n ? "Basically telepathic." : s >= n - 1 ? "You really get their taste." : s >= n / 2 ? "Solid, with surprises." : "Their taste still has secrets.";
+  view.innerHTML = `<div class="rise" style="margin-top:28px"><div class="mono">Taste Duel · @${esc(d.creator)} on @${esc(d.target)}</div>
+    <div class="bignum" style="margin-top:14px">${s}<small>/${n}</small></div><h2 class="ttl" style="margin-top:8px">${verdict}</h2>
     <div class="review">${d.rounds.map((r, i) => { const ans = r.options.find((o) => o.id === r.answer) || {}; const ok = d.answers[i] === r.answer;
-      return `<div class="ln card"><div class="ph" style="${bg(ans.image)}"></div><div style="flex:1"><div class="muted" style="font-size:12.5px">${r.kind === "pick" ? "Really on their card" : "Qloo's pick for their taste"}</div><b>${esc(ans.name)}</b></div><span style="font-size:20px">${ok ? "✓" : "✗"}</span></div>`; }).join("")}</div>
-    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">${S.me ? `<a class="go" href="/bridge?a=${esc(d.creator)}&b=${esc(d.target)}">Plan a night together</a>` : ""}<button class="ghost" id="share">Copy result link</button><a class="ghost" href="#/u/${esc(d.target)}">View their card</a></div></div>`;
+      return `<div class="ln panel"><div class="ph" style="${bg(ans.image)}"></div><div style="flex:1"><div class="mono" style="font-size:10.5px">${r.kind === "pick" ? "Really on their card" : "Qloo's pick for their taste"}</div><b>${esc(ans.name)}</b></div><span style="font:800 22px var(--display);color:${ok ? "var(--podcast)" : "var(--tomato)"}">${ok ? "✓" : "✗"}</span></div>`; }).join("")}</div>
+    <div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap">${S.me ? `<a class="btn hot" href="/bridge?a=${esc(d.creator)}&b=${esc(d.target)}">Plan a night together</a>` : ""}<button class="btn line" id="share">Copy result link</button><a class="btn line" href="#/u/${esc(d.target)}">Their card</a></div></div>`;
   $("#share").onclick = () => { navigator.clipboard.writeText(location.href); toast("Link copied"); };
 }
-
 async function duels() {
   if (!S.me) return (location.hash = "#/");
-  view.innerHTML = `<h2>Taste <span class="grad">Duels</span></h2><p class="sub">Pick anyone's card and test how well you know their taste. Rounds are built from Qloo: their real favorites hidden among look-alikes, and Qloo's own predictions.</p>
-    <div class="panel card" style="margin-bottom:18px"><label class="f" style="margin-top:0">Duel someone by username</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="txt" id="h" placeholder="e.g. mira_reads" style="flex:1;min-width:200px" /><button class="go" id="go">Start duel</button></div><div class="err" id="err"></div></div>
+  view.innerHTML = `<div class="studio-head"><div><div class="mono">Taste Duels</div><h2 class="ttl" style="margin:8px 0 0">How well do you <span class="serif">know them?</span></h2></div></div>
+    <div class="block panel" style="margin-bottom:18px"><label class="mono" style="display:block;margin-bottom:8px">Duel someone by username</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input class="inp" id="h" placeholder="mira_reads" style="flex:1;min-width:200px" /><button class="btn" id="go">Start duel</button></div><div class="err" id="err"></div>
+    <p class="muted" style="margin:6px 0 0;font-size:14px">Five rounds built from Qloo: their real favorites hidden among look-alikes, plus Qloo's own predictions for them.</p></div>
     <div class="list" id="list"><p class="muted"><span class="spin"></span></p></div>`;
   $("#go").onclick = () => { const h = $("#h").value.trim().replace(/^@/, ""); if (h) startDuel(h, $("#go")); };
   const r = await api("/api/duels").catch(() => ({ duels: [] }));
-  $("#list").innerHTML = r.duels.length ? r.duels.map((x) => `<a class="card" href="#/duel/${x.id}"><span>@${esc(x.creator)} → @${esc(x.target)}</span><span class="muted">${x.score == null ? "not played yet" : `${x.score}/${x.total}`}</span></a>`).join("") : `<p class="muted">No duels yet. Open someone's card from the radar, or try <a href="#/u/mira_reads">@mira_reads</a>.</p>`;
+  $("#list").innerHTML = r.duels.length ? r.duels.map((x) => `<a class="panel" href="#/duel/${x.id}"><span>@${esc(x.creator)} → @${esc(x.target)}</span><span class="mono">${x.score == null ? "not played" : `${x.score}/${x.total}`}</span></a>`).join("") : `<p class="muted">No duels yet. Open a card from the radar, or try <a href="#/u/mira_reads">@mira_reads</a>.</p>`;
 }
 
 async function route() {
-  if (location.pathname.startsWith("/u/")) { history.replaceState(null, "", "/#/u/" + location.pathname.slice(3)); }
-  if (location.pathname.startsWith("/duel/")) { history.replaceState(null, "", "/#/duel/" + location.pathname.slice(6)); }
+  if (location.pathname.startsWith("/u/")) history.replaceState(null, "", "/#/u/" + location.pathname.slice(3));
+  if (location.pathname.startsWith("/duel/")) history.replaceState(null, "", "/#/duel/" + location.pathname.slice(6));
   const [, r, arg] = location.hash.split("/");
-  nav();
-  window.scrollTo(0, 0);
-  if (r === "me") return editor();
+  nav(); window.scrollTo(0, 0);
+  if (r === "me") return studio();
   if (r === "radar") return radar();
   if (r === "duels") return duels();
   if (r === "u" && arg) return profile(decodeURIComponent(arg));
@@ -432,7 +680,7 @@ async function route() {
   if (r === "duel" && arg) return duel(arg);
   return home();
 }
-window.addEventListener("hashchange", route);
+window.addEventListener("hashchange", () => { if (location.hash !== "#/me") studio.editing = false; route(); });
 loadMe().catch(() => {}).finally(route);
 </script>
 </body>
