@@ -190,6 +190,17 @@ details.more[open] summary::before{content:"– "}
 .drow{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px dashed var(--line2)}
 .nextrow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:12px;max-width:560px}
 .nextrow figure{margin:0}.nextrow .ph{aspect-ratio:2/3;border-radius:12px;box-shadow:var(--shadow)}.nextrow figcaption{font-size:12.5px;font-weight:600;line-height:1.2;margin-top:6px}
+.usebar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.use{display:flex;flex-direction:column;gap:4px;padding:16px;text-decoration:none;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.use:hover{transform:translateY(-3px);box-shadow:0 22px 40px -24px rgba(21,19,15,.45)}
+.use b{font-size:18px;letter-spacing:-.02em;line-height:1.1}.use small{font-size:12.5px;color:var(--muted);line-height:1.3}
+a.tagbtn{text-decoration:none;cursor:pointer;transition:all .2s}a.tagbtn span{opacity:0;width:0;overflow:hidden;transition:all .2s}
+a.tagbtn:hover{background:var(--c);border-color:var(--c);color:#fff}a.tagbtn:hover span{opacity:1;width:auto;margin-left:2px}
+.nx .ph{position:relative;overflow:hidden}
+.nx .add{position:absolute;left:6px;right:6px;bottom:6px;padding:8px 4px;border:0;border-radius:999px;background:rgba(255,255,255,.95);font:600 12px var(--display);cursor:pointer;opacity:0;transform:translateY(8px);transition:all .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+.nx:hover .add,.nx .add.busy{opacity:1;transform:none}.nx .add:hover{background:var(--ink);color:#fff}
+@media (hover:none){.nx .add{opacity:1;transform:none}}
+@media (max-width:560px){.usebar{grid-template-columns:1fr}.nextrow{grid-template-columns:repeat(3,1fr)}}
 .reveal{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:10px}
 
 /* radar */
@@ -312,7 +323,7 @@ function idCard(c, { handle, display } = {}) {
     </div></div>
     <div class="face back"><div class="mesh" style="opacity:.55"></div><div class="in">
       <div class="idtop"><span class="mono">Taste DNA · from Qloo</span><span class="holo"></span></div>
-      <div class="dna">${rows.map(([k, v]) => `<div class="row"><span class="mono">${k}</span><div>${v.map(esc).join(" · ")}</div></div>`).join("") || '<div class="muted">Save your card to see your DNA.</div>'}</div>
+      <div class="dna">${rows.map(([k, v]) => `<div class="row"><span class="mono">${k}</span><div>${v.map((x) => esc(x.name || x)).join(" · ")}</div></div>`).join("") || '<div class="muted">Save your card to see your DNA.</div>'}</div>
       ${(c.next || []).length ? `<div class="mono" style="margin-top:auto">Qloo would pick for you next</div><div class="nextp" style="margin-top:6px">${c.next.slice(0, 5).map((n) => `<figure><div class="ph" style="${bg(n.image)}"></div><figcaption>${esc(n.name)}</figcaption></figure>`).join("")}</div>` : ""}
       <div class="idfoot"><span class="mono">${esc(h ? "@" + h : "")}</span><span class="mono">Tap to flip</span></div>
     </div></div>
@@ -532,10 +543,15 @@ function showId(fresh) {
     <div class="reveal">
       <div class="rise">${idCard(c, { handle: S.me.handle })}<div class="cardacts"><button class="btn line sm" id="flip">Flip card</button><button class="btn line sm" id="png">Download PNG</button><button class="btn line sm" id="share">Copy link</button></div></div>
       <div class="rise" style="animation-delay:.15s">
-        <div class="mono">What Qloo read in your picks</div>
-        <div class="dnafull">${[["Style", c.dna?.style, "--tomato"], ["Genres", c.dna?.genre, "--cobalt"], ["Archetypes", c.dna?.archetype, "--artist"], ["Characters", c.dna?.character, "--book"], ["Music", c.dna?.music, "--podcast"]].filter((r) => r[1] && r[1].length).map(([k, v, col], i) => `<div class="drow rise" style="animation-delay:${0.2 + i * 0.08}s"><span class="mono" style="color:var(${col})">${k}</span><div class="chips">${v.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div></div>`).join("")}</div>
-        ${(c.next || []).length ? `<div class="mono" style="margin-top:26px">Qloo would pick for you next</div><div class="nextrow">${c.next.map((n) => `<figure><div class="ph" style="${bg(n.image)}"></div><figcaption>${esc(n.name)}</figcaption></figure>`).join("")}</div>` : ""}
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px"><a class="btn hot" href="#/radar">Find my taste twins →</a><button class="btn line" id="edit">Edit picks</button></div>
+        <div class="usebar">
+          <a class="use panel" href="#/radar"><span class="mono" style="color:var(--tomato)">01 · Meet</span><b>Find taste twins</b><small>People ranked by how close their Qloo graph is to yours</small></a>
+          <a class="use panel" href="#/duels"><span class="mono" style="color:var(--cobalt)">02 · Play</span><b>Duel a friend</b><small>Guess their real favorites and Qloo's picks for them</small></a>
+          <a class="use panel" href="#/radar"><span class="mono" style="color:var(--podcast)">03 · Go out</span><b>Plan a night</b><small>Match with someone, then one film, album, book and place for both</small></a>
+        </div>
+        <div class="mono" style="margin-top:26px">What Qloo read in your picks · <span style="color:var(--ink2)">tap a tag to meet people who share it</span></div>
+        <div class="dnafull">${[["Style", c.dna?.style, "--tomato"], ["Genres", c.dna?.genre, "--cobalt"], ["Archetypes", c.dna?.archetype, "--artist"], ["Characters", c.dna?.character, "--book"], ["Music", c.dna?.music, "--podcast"]].filter((r) => r[1] && r[1].length).map(([k, v, col], i) => `<div class="drow rise" style="animation-delay:${0.2 + i * 0.08}s"><span class="mono" style="color:var(${col})">${k}</span><div class="chips">${v.map((x) => x.id ? `<a class="chip tagbtn" style="--c:var(${col})" href="#/radar/${encodeURIComponent(x.id)}">${esc(x.name)}<span>→</span></a>` : `<span class="chip">${esc(x.name || x)}</span>`).join("")}</div></div>`).join("")}</div>
+        ${(c.next || []).length ? `<div class="mono" style="margin-top:26px">Qloo would pick for you next · <span style="color:var(--ink2)">add the ones you already love to sharpen your ID</span></div><div class="nextrow">${c.next.map((n, i) => `<figure class="nx" data-i="${i}"><div class="ph" style="${bg(n.image)}"><button class="add" data-i="${i}">+ Add to my card</button></div><figcaption>${esc(n.name)}</figcaption></figure>`).join("")}</div>` : ""}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:28px"><button class="btn line" id="edit">Edit picks</button></div>
       </div>
     </div>`;
   bindCard();
@@ -543,6 +559,13 @@ function showId(fresh) {
   $("#png").onclick = exportCard;
   $("#share").onclick = () => { navigator.clipboard.writeText(`${location.origin}/u/${S.me.handle}`); toast("Card link copied"); };
   $("#edit").onclick = () => { studio.editing = true; route(); };
+  $$(".nx .add").forEach((b) => (b.onclick = async () => {
+    const n = c.next[+b.dataset.i]; const favs = [...(c.favorites || [])];
+    if (favs.length >= 10) return toast("Your card holds 10. Remove one in Edit picks first.");
+    $$(".nx .add").forEach((x) => (x.disabled = true)); b.innerHTML = `<span class="spin"></span> Re-reading…`; b.classList.add("busy");
+    try { const r = await api("/api/profile", { method: "POST", body: { display: c.display, city: c.city, bio: c.bio, favorites: [...favs, n] } }); S.card = r.card; toast(`Added ${n.name}. Your ID was re-read.`); showId(); }
+    catch (e) { toast(e.message); $$(".nx .add").forEach((x) => (x.disabled = false)); b.textContent = "+ Add to my card"; b.classList.remove("busy"); }
+  }));
 }
 
 // ---------- public card ----------
@@ -578,14 +601,15 @@ async function startDuel(handle, btn) {
 }
 
 // ---------- radar ----------
-async function radar() {
+async function radar(tag) {
   if (!S.me) return (location.hash = "#/");
   view.innerHTML = `<div class="studio-head"><div><div class="mono">Taste Radar</div><h2 class="ttl" style="margin:8px 0 0">Your taste <span class="serif">twins.</span></h2></div>
     <p class="muted" style="max-width:420px;margin:0">Ranked by how close each person's Qloo taste graph is to yours. Identities stay hidden until you both wave.</p></div>
     <div id="ppl"><div class="people">${Array.from({ length: 6 }, () => `<div class="panel" style="height:300px"><div class="skel" style="aspect-ratio:auto;height:100%;border-radius:var(--r)"></div></div>`).join("")}</div></div>`;
-  let r; try { r = await api("/api/radar"); } catch (e) { $("#ppl").innerHTML = `<p class="err">${esc(e.message)}</p>`; return; }
+  let r; try { r = await api("/api/radar" + (tag ? "?tag=" + encodeURIComponent(tag) : "")); } catch (e) { $("#ppl").innerHTML = `<p class="err">${esc(e.message)}</p>`; return; }
   if (r.needsCard) { $("#ppl").innerHTML = `<div class="block panel"><h3 style="margin:0 0 10px;font-size:26px">Your Taste ID needs 3+ favorites first.</h3><a class="btn hot" href="#/me">Build my Taste ID</a></div>`; return; }
-  $("#ppl").innerHTML = `<div class="people">${r.people.map(personCard).join("")}</div>`;
+  if (r.tag) { $(".studio-head h2").innerHTML = `Who else is <span class="serif">“${esc(r.tag.name || "this")}”</span>`; $(".studio-head p").innerHTML = `${r.people.length} ${r.people.length === 1 ? "person shares" : "people share"} this Qloo tag with you, ranked by overall taste match. <a href="#/radar">Show everyone</a>`; }
+  $("#ppl").innerHTML = r.people.length ? `<div class="people">${r.people.map(personCard).join("")}</div>` : `<div class="block panel"><h3 style="margin:0 0 10px;font-size:24px">Nobody else carries this tag yet.</h3><a class="btn line" href="#/radar">Show everyone</a></div>`;
   $$("[data-wave]").forEach((b) => (b.onclick = async () => {
     b.disabled = true; b.innerHTML = `<span class="spin"></span>`;
     try { const w = await api("/api/wave/" + b.dataset.wave, { method: "POST" }); if (w.mutual) { toast("They waved back. It's a match!"); setTimeout(() => (location.hash = "#/match/" + b.dataset.wave), 600); } else b.textContent = "Waved"; }
@@ -673,7 +697,7 @@ async function route() {
   const [, r, arg] = location.hash.split("/");
   nav(); window.scrollTo(0, 0);
   if (r === "me") return studio();
-  if (r === "radar") return radar();
+  if (r === "radar") return radar(arg ? decodeURIComponent(arg) : "");
   if (r === "duels") return duels();
   if (r === "u" && arg) return profile(decodeURIComponent(arg));
   if (r === "match" && arg) return match(arg);
