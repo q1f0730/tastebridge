@@ -71,8 +71,8 @@ function publicCard(p, { blind = false } = {}) {
   const next = [...all.filter((t) => t.ch === "e" && t.kind === "movie").slice(0, 3), ...all.filter((t) => t.ch === "e" && t.kind === "artist").slice(0, 2)].map(({ id, name, kind, image, year }) => ({ id, name, domain: kind, image, year }));
   const music = topTags(all.filter((t) => t.ch === "m"), 4);
   const story = topTags(all.filter((t) => t.ch !== "e" && t.ch !== "m"), 40);
-  const group = (re) => story.filter((t) => re.test(t.kind || "")).slice(0, 4).map((t) => t.name);
-  const dna = { style: group(/^style/), genre: group(/^genre:media/), archetype: group(/^archetype/), character: group(/^character/), theme: group(/^theme/), music: music.map((t) => t.name) };
+  const group = (re) => story.filter((t) => re.test(t.kind || "")).slice(0, 4).map((t) => ({ id: t.id, name: t.name }));
+  const dna = { style: group(/^style/), genre: group(/^genre:media/), archetype: group(/^archetype/), character: group(/^character/), theme: group(/^theme/), music: music.map((t) => ({ id: t.id, name: t.name })) };
   const card = { archetype: p.archetype || "", tagline: p.tagline || "", color: p.color || COLORS[p.id % COLORS.length], favorites: ents, tags, next, dna, demo: !!p.demo, city: p.city || "" };
   if (blind) return { ...card, uid: p.id, favorites: ents.slice(0, 4) };
   return { ...card, uid: p.id, handle: p.handle, display: p.display || p.handle, bio: p.bio || "", complete: ents.length >= 3 };
@@ -273,12 +273,15 @@ async function waveState(env, me_id) {
   return { sent, got };
 }
 
-async function radar(env, user) {
+async function radar(env, user, url) {
   const mine = await loadProfile(env, "u.id", user.id);
   if ((mine.entities || []).length < 3) return json({ needsCard: true, people: [] });
   const [everyone, waves] = await Promise.all([allProfiles(env), waveState(env, user.id)]);
+  const tag = String(url.searchParams.get("tag") || "");
+  const tagName = tag ? ((mine.tags || []).find((t) => t.id === tag) || {}).name || "" : "";
   const people = everyone
     .filter((p) => p.id !== user.id && p.entities.length >= 3)
+    .filter((p) => !tag || (p.tags || []).some((t) => t.id === tag))
     .map((p) => {
       const m = similarity(mine.tags, p.tags, mine.entities, p.entities);
       const mutual = waves.sent.has(p.id) && waves.got.has(p.id);
@@ -286,7 +289,7 @@ async function radar(env, user) {
     })
     .sort((a, b) => b.match - a.match)
     .slice(0, 24);
-  return json({ people });
+  return json({ people, tag: tag ? { id: tag, name: tagName } : null });
 }
 
 async function wave(env, user, uid) {
@@ -452,7 +455,7 @@ export async function handleSocial(request, env, url) {
   if (p === "/api/me" && m === "GET") return user ? me(env, user) : json({ user: null });
   if (p === "/api/profile" && m === "POST") return (r = need()) || saveProfile(env, request, user);
   if (p.startsWith("/api/card/")) return getCard(env, decodeURIComponent(p.slice(10)), user);
-  if (p === "/api/radar") return (r = need()) || radar(env, user);
+  if (p === "/api/radar") return (r = need()) || radar(env, user, url);
   if (p.startsWith("/api/wave/") && m === "POST") return (r = need()) || wave(env, user, Number(p.slice(10)));
   if (p.startsWith("/api/match/")) return (r = need()) || matchDetail(env, user, Number(p.slice(11)));
   if (p === "/api/duel" && m === "POST") return (r = need()) || createDuel(env, request, user);
